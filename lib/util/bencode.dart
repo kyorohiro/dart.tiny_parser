@@ -87,7 +87,7 @@ class Bencode {
 }
 
 class Bdecoder {
-  BencodeParseError errorTmp = new BencodeParseError.empty();
+  BencodeError errorTmp = new BencodeError.empty();
 
   int index;
   Object decode(List<int> buffer) {
@@ -255,16 +255,16 @@ class Bencoder {
   }
 }
 
-class BencodeParseError implements Exception {
+class BencodeError implements Exception {
   String log = "";
 
-  BencodeParseError.empty() {}
+  BencodeError.empty() {}
 
-  BencodeParseError(String s, data.Uint8List buffer, int index) {
+  BencodeError(String s, data.Uint8List buffer, int index) {
     update(s, buffer, index);
   }
 
-  BencodeParseError update(String s, data.Uint8List buffer, int index) {
+  BencodeError update(String s, data.Uint8List buffer, int index) {
     log = s + "#" + buffer.toList().toString() + "index=" + index.toString() + ":" + super.toString();
     return this;
   }

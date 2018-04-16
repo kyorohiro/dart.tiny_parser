@@ -1,9 +1,10 @@
 part of hetimaparsr;
 
 typedef bool EasyParserMatchFunc(int target);
-class EasyParser {
-  bool logon = false;
 
+class EasyParser {
+
+  bool logon = false;
   int _index = 0;
   int get index => _index;
   void resetIndex(int __index) {_index = __index;} //[TODO]
@@ -382,20 +383,20 @@ class EasyParser {
 
   //
   //
-  FutureOr<String> readSign(int byteLength, {moveOffset:true}) {
+  FutureOr<String> readString(int byteLength, {moveOffset:true}) {
     if(_buffer.currentSize >= index+byteLength) {
-      return readSignSync(byteLength, moveOffset: moveOffset);
+      return readStringSync(byteLength, moveOffset: moveOffset);
     } else {
-      return readSignAsync(byteLength, moveOffset: moveOffset);
+      return readStringAsync(byteLength, moveOffset: moveOffset);
     }
   }
 
-  Future<String> readSignAsync(int byteLength, {moveOffset:true}) async {
+  Future<String> readStringAsync(int byteLength, {moveOffset:true}) async {
     await waitByBuffered(index, byteLength, checkLength: true);
-    return readSignSync(byteLength, moveOffset: moveOffset);
+    return readStringSync(byteLength, moveOffset: moveOffset);
   }
 
-  String readSignSync(int byteLength, {moveOffset:true}) {
+  String readStringSync(int byteLength, {moveOffset:true}) {
     List<int> va = getBytesSync(byteLength);
     String ret = _utfDecoder.convert(va, 0, byteLength);
     if(moveOffset) {

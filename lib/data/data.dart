@@ -17,7 +17,7 @@ abstract class Data implements DataReader, DataWriter {
 abstract class DataWriter {
   Future<int> getLength();
   Future<DataWriter> write(Object o, int start, {int length=null});
-  Future<int> truncate(int fileSize);
+  Future<int> truncate(int size);
   Future<DataWriter> flush();
 }
 

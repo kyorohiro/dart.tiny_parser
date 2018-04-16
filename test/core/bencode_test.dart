@@ -4,7 +4,7 @@ import 'package:test/test.dart' as unit;
 import 'package:tiny_parser/util.dart';
 import 'dart:typed_data' as type;
 import 'dart:convert' as convert;
-
+import 'dart:math' as math;
 void main() {
   unit.group('A group of tests', () {
     unit.test("bencode: string", () {
@@ -66,4 +66,15 @@ void main() {
     unit.expect(1024, me["value"]);
   });
  });
+}
+
+class Uuid
+{
+  static math.Random _random = new math.Random();
+  static String createUUID() {
+    return s4()+s4()+"-"+s4()+"-"+s4()+"-"+s4()+"-"+s4()+s4()+s4();
+  }
+  static String s4() {
+    return (_random.nextInt(0xFFFF)+0x10000).toRadixString(16).substring(0,4);
+  }
 }

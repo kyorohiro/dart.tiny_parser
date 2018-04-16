@@ -10,7 +10,7 @@ class BencodeAsync {
 }
 
 class BdecoderAsync {
-  HetiBencodeParseError tmpError = new HetiBencodeParseError.empty();
+  BencodeAsyncError tmpError = new BencodeAsyncError.empty();
   static String DIGIT_AS_STRING = "0123456789";
   static List<int> DIGIT = convert.UTF8.encode(DIGIT_AS_STRING);
 
@@ -119,11 +119,11 @@ class BdecoderAsync {
   }
 }
 
-class HetiBencodeParseError implements Exception {
+class BencodeAsyncError implements Exception {
   String log = "";
-  HetiBencodeParseError.empty() {}
+  BencodeAsyncError.empty() {}
 
-  HetiBencodeParseError(String s) {
+  BencodeAsyncError(String s) {
     update(s);
   }
 

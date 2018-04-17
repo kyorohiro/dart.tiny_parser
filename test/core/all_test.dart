@@ -15,6 +15,9 @@ import './hetihttpresponse_test_c.dart' as httpresponse_test_c;
 import './hetihttpresponse_test_d.dart' as httpresponse_test_d;
 import './httpurldecoder_test.dart' as httpurldecoder_test;
 import './test_hetiip.dart' as test_hetiip;
+import './meta_test.dart' as meta_test;
+
+
 
 
 void main() {
@@ -39,6 +42,6 @@ void main() {
   httpresponse_test_d.main();
   httpurldecoder_test.main();
   test_hetiip.main();
-
+  meta_test.main();
 
 }

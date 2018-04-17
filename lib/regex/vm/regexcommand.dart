@@ -1,11 +1,11 @@
 part of hetimaregex;
 
 abstract class RegexCommand {
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser);
+  Future<List<int>> check(RegexVM vm, heti.Parser parser);
 }
 
 class MemoryStartCommand extends RegexCommand {
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     RegexTask currentTask = vm._currentTask;
     int index = currentTask._nextMemoryId;
@@ -23,7 +23,7 @@ class MemoryStartCommand extends RegexCommand {
 }
 
 class MemoryStopCommand extends RegexCommand {
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     RegexTask currentTask = vm._currentTask;
     currentTask._currentMemoryTargetId.removeLast();
@@ -42,7 +42,7 @@ class MatchCommandNotification extends Error {
 }
 
 class MatchCommand extends RegexCommand {
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     c.completeError(new MatchCommandNotification(""));
     return c.future;
@@ -64,7 +64,7 @@ class JumpTaskCommand extends RegexCommand {
     _pos1 = pos1;
   }
 
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     RegexTask currentTask = vm._currentTask;
     if (currentTask == null) {
@@ -96,7 +96,7 @@ class SplitTaskCommand extends RegexCommand {
     _pos2 = pos2;
   }
 
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     RegexTask currentTask = vm._currentTask;
     if (currentTask == null) {
@@ -122,7 +122,7 @@ class CharCommand extends RegexCommand {
     _expect = new List.from(v);
   }
 
-  Future<List<int>> check(RegexVM vm, heti.EasyParser parser) {
+  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
     Completer<List<int>> c = new Completer();
     int length = _expect.length;
     parser.push();

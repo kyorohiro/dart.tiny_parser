@@ -8,7 +8,7 @@ import 'package:tiny_parser/sample.dart' as hetima;
 void main() {
   unit.test("request-line", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HetiRequestLine> ret = hetima.HetiHttpResponse.decodeRequestLine(parser);
     builder.appendString("GET /xxx/yy/zz HTTP/1.1\r\n");
     unit.expect("GET",(await ret).method);
@@ -18,7 +18,7 @@ void main() {
 
   unit.test("request message",() async{
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HetiHttpRequestHead> ret = hetima.HetiHttpResponse.decodeRequestMessage(parser);
     builder.appendString("GET /xxx/yy/zz HTTP/1.1\r\n");
     builder.appendString("aaa: bb\r\n");

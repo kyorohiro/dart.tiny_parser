@@ -12,7 +12,7 @@ void main() {
   unit.group("response_b", () {
     unit.test("http/1.1", () async {
       hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-      hetima.EasyParser parser = new hetima.EasyParser(builder);
+      hetima.Parser parser = new hetima.Parser(builder);
       Future<String> ret = hetima.HetiHttpResponse.decodeHttpVersion(parser);
       builder.appendString("HTTP/1.1");
       unit.expect("HTTP/1.1", await ret);
@@ -21,7 +21,7 @@ void main() {
 
   unit.test("response phase", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<String> ret = hetima.HetiHttpResponse.decodeReasonPhrase(parser);
     builder.appendString("aaa bbb");
     builder.appendString(" ccc");
@@ -31,7 +31,7 @@ void main() {
 
   unit.test("reasonphase_2", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<String> ret = hetima.HetiHttpResponse.decodeReasonPhrase(parser);
     builder.appendString("aaa bbb");
     builder.appendString(" ccc");
@@ -42,7 +42,7 @@ void main() {
 
   unit.test("decodeCrlf_1", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<String> ret = hetima.HetiHttpResponse.decodeCrlf(parser);
     builder.appendString("\n");
     //builder.fin();
@@ -52,7 +52,7 @@ void main() {
 
   unit.test("decodeCrlf_2", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<String> ret = hetima.HetiHttpResponse.decodeCrlf(parser);
     builder.appendString(" ");
     //builder.fin();
@@ -66,7 +66,7 @@ void main() {
 
   unit.test("statusline", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HetiHttpResponseStatusLine> ret = hetima.HetiHttpResponse.decodeStatusline(parser);
     builder.appendString("HTTP/1.1 200 tes test test\r\n");
     //builder.fin();
@@ -78,7 +78,7 @@ void main() {
 
   unit.test("decodeHeaderField_1f", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HttpResponseHeaderField> ret = hetima.HetiHttpResponse.decodeHeaderField(parser);
     builder.appendString("test:   aaa\r\n");
     //builder.fin();
@@ -90,7 +90,7 @@ void main() {
   unit.test("decodeHeaderField_2f", () async {
     try {
       hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-      hetima.EasyParser parser = new hetima.EasyParser(builder);
+      hetima.Parser parser = new hetima.Parser(builder);
       Future<hetima.HttpResponseHeaderField> ret = hetima.HetiHttpResponse.decodeHeaderField(parser);
       builder.appendString("test   aaa\r\n");
       //builder.fin();
@@ -103,7 +103,7 @@ void main() {
 
   unit.test("decodeHeaderFields_1f", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<List<hetima.HttpResponseHeaderField>> ret = hetima.HetiHttpResponse.decodeHeaderFields(parser);
     builder.appendString("test1:   aaa\r\n");
     builder.appendString("test2:   bbb\r\n\r\n");
@@ -117,7 +117,7 @@ void main() {
 
   unit.test("decodeHttpMessage_1f", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HttpClientHead> ret = hetima.HetiHttpResponse.decodeHttpHead(parser);
     builder.appendString("HTTP/1.1 200 tes test test\r\n");
     builder.appendString("test1:   aaa\r\n");
@@ -131,7 +131,7 @@ void main() {
   });
   unit.test("decodeHttpMessage_2f", () async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HttpClientHead> ret = hetima.HetiHttpResponse.decodeHttpHead(parser);
     builder.appendString("HTTP/1.1 200 tes test test\r\n");
     builder.appendString("test1:   aaa\r\n");

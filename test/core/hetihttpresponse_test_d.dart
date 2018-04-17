@@ -8,7 +8,7 @@ import 'package:test/test.dart' as unit;
 void main() {
   unit.test("001",() async{
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HetiHttpRequestRange> f = hetima.HetiHttpResponse.decodeRequestRangeValue(parser);
     builder.appendString("bytes=0-100");
     //builder.fin();
@@ -19,7 +19,7 @@ void main() {
 
   unit.test("002",() async {
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.Parser parser = new hetima.Parser(builder);
     Future<hetima.HetiHttpRequestRange> f = hetima.HetiHttpResponse.decodeRequestRangeValue(parser);
     builder.appendString("bytes=0-");
     //builder.fin();

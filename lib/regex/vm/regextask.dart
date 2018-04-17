@@ -2,7 +2,7 @@ part of hetimaregex;
 
 class RegexTask {
   int _nextCommandLocation = 0;
-  heti.EasyParser _parseHelperWithTargetSource = null;
+  heti.Parser _parseHelperWithTargetSource = null;
   int get nextCommandLocation => _nextCommandLocation;
 
   List<List<int>> _memory = [];
@@ -27,7 +27,7 @@ class RegexTask {
     this._nextMemoryId = tasl._nextMemoryId;
   }
 
-  RegexTask.fromCommnadPos(int commandPos, heti.EasyParser parser) {
+  RegexTask.fromCommnadPos(int commandPos, heti.Parser parser) {
     _nextCommandLocation = commandPos;
     _parseHelperWithTargetSource = parser.toClone();
   }

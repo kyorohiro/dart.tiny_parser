@@ -3,7 +3,7 @@ part of hetimaregex;
 class RegexLexer {
 
   Future<List<RegexToken>> scan(List<int> text) async {
-    heti.EasyParser parser = new heti.EasyParser(new heti.ParserByteBuffer.fromList(text, true));
+    heti.Parser parser = new heti.Parser(new heti.ParserByteBuffer.fromList(text, true));
 
     List<RegexToken> tokens = [];
       do {

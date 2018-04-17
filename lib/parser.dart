@@ -5,6 +5,7 @@ import 'dart:core';
 import 'dart:convert' as convert;
 import 'dart:typed_data' as data;
 import 'data.dart';
+import 'regex.dart' as regex;
 
 part 'parser/parserReader.dart';
 part 'parser/parserReaderBase.dart';

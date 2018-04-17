@@ -9,7 +9,7 @@ class HetiHttpResponse {
   //
   // head := line headfield
   //
-  static Future<HttpClientHead> decodeHttpHead(EasyParser parser) async {
+  static Future<HttpClientHead> decodeHttpHead(Parser parser) async {
     HttpClientHead result = new HttpClientHead();
     result.line = await decodeStatusline(parser);
     result.headerField =  await decodeHeaderFields(parser);
@@ -20,7 +20,7 @@ class HetiHttpResponse {
   //
   // headerfields := *(headerfiled crlf)
   //
-  static Future<List<HttpResponseHeaderField>> decodeHeaderFields(EasyParser parser) async {
+  static Future<List<HttpResponseHeaderField>> decodeHeaderFields(Parser parser) async {
     List<HttpResponseHeaderField> result = new List();
     while (true) {
       try {
@@ -37,7 +37,7 @@ class HetiHttpResponse {
   //
   // headfield := name ":" (OWS) value crlf
   //
-  static Future<HttpResponseHeaderField> decodeHeaderField(EasyParser parser) async {
+  static Future<HttpResponseHeaderField> decodeHeaderField(Parser parser) async {
     HttpResponseHeaderField result = new HttpResponseHeaderField();
     result.fieldName = await decodeFieldName(parser);
     await parser.nextString(":");
@@ -47,12 +47,12 @@ class HetiHttpResponse {
     return result;
   }
 
-  static Future<String> decodeFieldName(EasyParser parser) async {
+  static Future<String> decodeFieldName(Parser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.TCHAR,expectedMatcherResult: true);
     return convert.UTF8.decode(v);
   }
 
-  static Future<String> decodeFieldValue(EasyParser parser) async {
+  static Future<String> decodeFieldValue(Parser parser) async {
     List<int> v = await parser.matchBytesFromMatche((int target) {
       if (target == 0x0D || target == 0x0A) {
         return false;
@@ -65,7 +65,7 @@ class HetiHttpResponse {
 
   //
   // Http-version
-  static Future<String> decodeHttpVersion(EasyParser parser) async {
+  static Future<String> decodeHttpVersion(Parser parser) async {
     int major = 0;
     int minor = 0;
     await parser.nextString("HTTP" + "/");
@@ -80,13 +80,13 @@ class HetiHttpResponse {
   //
   // Status Code
   // DIGIT DIGIT DIGIT
-  static Future<String> decodeStatusCode(EasyParser parser) async {
+  static Future<String> decodeStatusCode(Parser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.DIGIT);
     int ret = 100 * (v[0] - 48) + 10 * (v[1] - 48) + (v[2] - 48);
     return "${ret}";
   }
 
-  static Future<String> decodeReasonPhrase(EasyParser parser) async {
+  static Future<String> decodeReasonPhrase(Parser parser) async {
     // List<int> vv = await parser.nextBytePatternByUnmatch(new TextMatcher());
     // reason-phrase  = *( HTAB / SP / VCHAR / obs-text )
     List<int> vv = await parser.matchBytesFromMatche((int target) {
@@ -109,7 +109,7 @@ class HetiHttpResponse {
   }
 
   //Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
-  static Future<HetiHttpResponseStatusLine> decodeStatusline(EasyParser parser) async {
+  static Future<HetiHttpResponseStatusLine> decodeStatusline(Parser parser) async {
     HetiHttpResponseStatusLine result = new HetiHttpResponseStatusLine();
     result.version = await decodeHttpVersion(parser);
     await decodeSP(parser);
@@ -120,16 +120,16 @@ class HetiHttpResponse {
     return result;
   }
 
-  static FutureOr<List<int>> decodeOWS(EasyParser parser) {
+  static FutureOr<List<int>> decodeOWS(Parser parser) {
     return parser.matchBytesFromBytes(RfcTable.OWS,expectedMatcherResult: true);
   }
 
-  static FutureOr<List<int>> decodeSP(EasyParser parser) {
+  static FutureOr<List<int>> decodeSP(Parser parser) {
     return parser.matchBytesFromBytes(RfcTable.OWS,expectedMatcherResult: true);
   }
 
   //
-  static Future<String> decodeCrlf(EasyParser parser) async {
+  static Future<String> decodeCrlf(Parser parser) async {
     bool crlf = true;
     parser.push();
     try {
@@ -151,7 +151,7 @@ class HetiHttpResponse {
   }
 
   //
-  static Future<int> decodeChunkedSize(EasyParser parser) async {
+  static Future<int> decodeChunkedSize(Parser parser) async {
     List<int> n = await parser.matchBytesFromBytes(RfcTable.HEXDIG,expectedMatcherResult: true);
     if (n.length == 0) {
       throw new EasyParseError();
@@ -163,7 +163,7 @@ class HetiHttpResponse {
     return v;
   }
 
-  static decodeChunkExtension(EasyParser parser) async {
+  static decodeChunkExtension(Parser parser) async {
     if (0 != await parser.checkString(";")) {
       while (0 == await parser.checkString("\r\n")) {
         parser.moveOffset(1);
@@ -172,7 +172,7 @@ class HetiHttpResponse {
   }
 
   //  request-line   = method SP request-target SP HTTP-version CRLF
-  static Future<HetiRequestLine> decodeRequestLine(EasyParser parser) async {
+  static Future<HetiRequestLine> decodeRequestLine(Parser parser) async {
     HetiRequestLine result = new HetiRequestLine();
     result.method = await decodeMethod(parser);
     await decodeSP(parser);
@@ -183,7 +183,7 @@ class HetiHttpResponse {
     return result;
   }
 
-  static Future<HetiHttpRequestHead> decodeRequestMessage(EasyParser parser) async {
+  static Future<HetiHttpRequestHead> decodeRequestMessage(Parser parser) async {
     HetiHttpRequestHead result = new HetiHttpRequestHead();
     result.line = await decodeRequestLine(parser);
     result.headerField = await decodeHeaderFields(parser);
@@ -192,13 +192,13 @@ class HetiHttpResponse {
   }
 
   // metod = token = 1*tchar
-  static Future<String> decodeMethod(EasyParser parser) async {
+  static Future<String> decodeMethod(Parser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.TCHAR,expectedMatcherResult: true);
     return convert.UTF8.decode(v);
   }
 
   // CHAR_STRING
-  static Future<String> decodeRequestTarget(EasyParser parser) async {
+  static Future<String> decodeRequestTarget(Parser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.VCHAR,expectedMatcherResult: true);
     return convert.UTF8.decode(v);
   }
@@ -207,7 +207,7 @@ class HetiHttpResponse {
   // absolute-URI  = scheme ":" hier-part [ "?" query ]
 
   //rfc2616
-  static Future<HetiHttpRequestRange> decodeRequestRangeValue(EasyParser parser) async {
+  static Future<HetiHttpRequestRange> decodeRequestRangeValue(Parser parser) async {
     HetiHttpRequestRange ret = new HetiHttpRequestRange();
     await parser.nextString("bytes=");
     List<int> startAsList =  await parser.matchBytesFromBytes(RfcTable.DIGIT,expectedMatcherResult: true);

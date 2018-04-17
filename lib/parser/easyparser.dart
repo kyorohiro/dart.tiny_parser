@@ -1,8 +1,8 @@
 part of hetimaparsr;
 
-typedef bool EasyParserMatchFunc(int target);
+typedef bool ParserMatchFunc(int target);
 
-class EasyParser {
+class Parser {
 
   bool logon = false;
   int _index = 0;
@@ -16,7 +16,7 @@ class EasyParser {
   MemoryBuffer _cache;
   convert.Utf8Decoder _utfDecoder = new convert.Utf8Decoder(allowMalformed: true);
 
-  EasyParser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
+  Parser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
     _buffer = builder;
     if(cacheSize < 256) {
       cacheSize = 256;
@@ -24,8 +24,8 @@ class EasyParser {
     _cache = new MemoryBuffer(cacheSize);
   }
 
-  EasyParser toClone() {
-    EasyParser parser = new EasyParser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
+  Parser toClone() {
+    Parser parser = new Parser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
     parser._index = index;
     parser._stack = new List.from(_stack);
     return parser;
@@ -212,7 +212,7 @@ class EasyParser {
 
   //
   //
-  FutureOr<int> checkBytesFromMatcher(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true}) {
+  FutureOr<int> checkBytesFromMatcher(ParserMatchFunc matcher, {bool expectedMatcherResult:true}) {
     int r = checkBytesFromMatcherSync(matcher, expectedMatcherResult:expectedMatcherResult);
     if (r == 0 && _buffer.currentSize > index) {
       return r;
@@ -224,7 +224,7 @@ class EasyParser {
     }
   }
 
-  Future<int> checkBytesFromMatcherAsync(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) async {
+  Future<int> checkBytesFromMatcherAsync(ParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) async {
     int nextByte = 0;
     int length = 0;
     while(true) ROOT:{
@@ -246,7 +246,7 @@ class EasyParser {
     return length;
   }
 
-  int checkBytesFromMatcherSync(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) {
+  int checkBytesFromMatcherSync(ParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) {
     int nextByte = 0;
     while(true) ROOT:{
       if (_buffer.currentSize > index) {
@@ -305,7 +305,7 @@ class EasyParser {
     }
   }
 
-  FutureOr<List<int>> matchBytesFromMatche(EasyParserMatchFunc func, {bool expectedMatcherResult:true}) {
+  FutureOr<List<int>> matchBytesFromMatche(ParserMatchFunc func, {bool expectedMatcherResult:true}) {
     FutureOr<int> lenFOr = checkBytesFromMatcher(func, expectedMatcherResult:expectedMatcherResult);
     if(lenFOr is Future<int>) {
       return lenFOr.then((int len) {

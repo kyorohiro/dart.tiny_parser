@@ -1,7 +1,7 @@
 library hetimaregex;
 
 import 'data.dart' as heti;
-import 'util.dart' as heti;
+import 'sample.dart' as heti;
 import 'parser.dart' as heti;
 
 import 'dart:async';

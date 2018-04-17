@@ -1,5 +1,5 @@
 import 'package:test/test.dart' as unit;
-import 'package:tiny_parser/util.dart' as hetima;
+import 'package:tiny_parser/sample.dart' as hetima;
 import 'package:tiny_parser/data.dart' as hetima;
 
 void main() {

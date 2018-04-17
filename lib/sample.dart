@@ -7,8 +7,8 @@ import 'dart:typed_data' as data;
 import 'data.dart';
 import 'parser.dart';
 
-part 'util/percentencode.dart';
-part 'util/bencode.dart';
-part 'util/bencode_async.dart';
-part 'util/uuid.dart';
+part 'sample/percentencode.dart';
+part 'sample/bencode.dart';
+part 'sample/bencode_async.dart';
+
 

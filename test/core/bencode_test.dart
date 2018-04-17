@@ -1,7 +1,7 @@
 library bencode.test;
 
 import 'package:test/test.dart' as unit;
-import 'package:tiny_parser/util.dart';
+import 'package:tiny_parser/sample.dart';
 import 'dart:typed_data' as type;
 import 'dart:convert' as convert;
 import 'dart:math' as math;

@@ -1,7 +1,7 @@
 import 'package:test/test.dart' as unit;
 import 'package:tiny_parser/data.dart';
 import 'package:tiny_parser/parser.dart';
-import 'package:tiny_parser/util.dart';
+import 'package:tiny_parser/sample.dart';
 
 void main() {
   unit.test("nextBuffer", () async {

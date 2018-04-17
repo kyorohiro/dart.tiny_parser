@@ -397,11 +397,8 @@ class EasyParser {
   }
 
   String readStringSync(int byteLength, {moveOffset:true}) {
-    List<int> va = getBytesSync(byteLength);
+    List<int> va = getBytesSync(byteLength, moveOffset:moveOffset);
     String ret = _utfDecoder.convert(va, 0, byteLength);
-    if(moveOffset) {
-      _index += byteLength;
-    }
     return ret;
   }
 

@@ -8,8 +8,7 @@ Future<MarkdownData> markdownToHtml(String markdownSrc) async {
   MarkdownData markdownData = new MarkdownData();
   markdownData.src = markdownSrc;
 
-  Metadata meta = new Metadata.create();
-  await meta.parse(markdownSrc);
+  Metadata meta = await Metadata.create(markdownSrc);
   markdownData.metadata = meta.metadata;
 
   markdownData.html = "dummy";
@@ -27,8 +26,14 @@ class Metadata {
   pars.TinyParser parser;
   Map<String,String> metadata = {};
   String content = "";
+  reg.RegexParser regexParser = new reg.RegexParser();
+  reg.RegexVM spaceVM = new reg.RegexVM.createFromPattern("( )*|(\t)*");
+  reg.RegexVM crlfVM = new reg.RegexVM.createFromPattern("(\r\n)|(\n)");
 
-  Metadata.create() {
+  static Future<Metadata> create(String source) async{
+    Metadata metadata = new Metadata();
+    await metadata.parse(source);
+    return metadata;
   }
 
   Future<int> parse(String source) async {
@@ -37,28 +42,28 @@ class Metadata {
     parser = new pars.TinyParser(reader);
     reader.addBytes(conv.UTF8.encode(source));
     reader.loadCompleted = true;
-    int ret = await encMetadata(parser);
+    int ret = await eMetadata(parser);
     content = source.substring(ret);
     return ret;
   }
 
-  Future<int> encMetadata(pars.TinyParser parser) async {
+  Future<int> eMetadata(pars.TinyParser parser) async {
     try {
       parser.push();
 
       //
       // --- crlf
-      await parser.nextString("---");await encSpace(parser);await encCrlf(parser);
+      await parser.nextString("---");await eSpace(parser);await eCrlf(parser);
       //
       // <xxx> : <yyy> crlf
       do{
         if(0 != await parser.checkBytesFromMatchBytes(conv.UTF8.encode(" \t")));
-        await encKeyVaklue(parser);
+        await eKeyValue(parser);
       } while(0 == await parser.checkString("---"));
 
       //
       // --- crlf
-      await parser.nextString("---");await encSpace(parser);await encCrlf(parser);
+      await parser.nextString("---");await eSpace(parser);await eCrlf(parser);
 
       parser.pop();
       return parser.index;
@@ -69,16 +74,16 @@ class Metadata {
     }
   }
 
-  Future<bool> encKeyVaklue(pars.TinyParser parser) async {
-    String k = await encKey(parser);
+  Future<bool> eKeyValue(pars.TinyParser parser) async {
+    String k = await eKey(parser);
     await parser.nextString(":");
-    var v = await encValue(parser);
-    await encSpace(parser);
-    await encCrlf(parser);
+    var v = await eValue(parser);
+    await eSpace(parser);
+    await eCrlf(parser);
     metadata[k] = v;
   }
 
-  Future<String> encKey(pars.TinyParser parser) async {
+  Future<String> eKey(pars.TinyParser parser) async {
     int start = parser.index;
     int end = parser.index;
     if(0!=await parser.checkString(" ")) {
@@ -88,35 +93,26 @@ class Metadata {
     return conv.UTF8.decode(v, allowMalformed: true);
   }
 
-  Future<String> encValue(pars.TinyParser parser) async {
+  Future<String> eValue(pars.TinyParser parser) async {
     List<int> v = await parser.matchBytesFromBytes(conv.UTF8.encode("\r\n"), expectedMatcherResult: false);
     String ret = conv.UTF8.decode(v);
 
-    if(0 == await parser.checkString("\n---") &&
-        0 == await parser.checkString("\r\n---") &&
-        (0 != await parser.checkString("\r\n ") || 0 != await parser.checkString("\r\n\t"))
-    ) {
-      return ret + await encCrlf(parser) + (await encSpace(parser)?"":"") + await encValue(parser);
+    if((0 != await parser.checkString("\r\n ") || 0 != await parser.checkString("\r\n\t"))) {
+      return ret + await eCrlf(parser) + (await eSpace(parser)?"":"") + await eValue(parser);
     }
     else {
       return ret;
     }
   }
 
-  Future<String> encCrlf(pars.TinyParser parser) async {
-    int nextIndex = 0;
-    if( 0!= (nextIndex= parser.checkString("\r\n")) || 0!=(nextIndex = parser.checkString("\n"))) {
-      parser.resetIndex(parser.index +nextIndex);
-      return (nextIndex == 1?"\n":"\r\n");
-    } else {
-      throw "";
-    }
+  Future<String> eCrlf(pars.TinyParser parser) async {
+    List<List<int>> ret =  await crlfVM.lookingAtFromEasyParser(parser);
+    return (ret[0].length == 1 ? "\n" : "\r\n");
   }
 
-  Future<bool> encSpace(pars.TinyParser parser) async {
+  Future<bool> eSpace(pars.TinyParser parser) async {
     try {
-      reg.RegexVM vm = await (new reg.RegexParser()).compile("( )*|(\t)*");
-      await vm.lookingAtFromEasyParser(parser);
+      await spaceVM.lookingAtFromEasyParser(parser);
       return true;
     } catch(e) {
       return false;

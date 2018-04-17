@@ -14,12 +14,12 @@ void main() {
 */
     test('meta data1', () async {
       hetima.MarkdownData markdownData = await hetima.markdownToHtml(
-          "---\r\n" // 0-5
-              "a:b\r\n"  // 5-10
-              "test:test\r\n" // 11-22
-              "---\r\n"
-              "#  test\r\n"
-              "Game programming\r\n");
+          "--- \r\n" // 0-5
+          "a:b\r\n"  // 5-10
+          "test:test\r\n" // 11-22
+          "---\r\n"
+          "#  test\r\n"
+          "Game programming\r\n");
       expect(markdownData.metadata["a"], "b");
       expect(markdownData.metadata["test"], "test");
       print(markdownData.html);

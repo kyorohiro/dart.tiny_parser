@@ -2,6 +2,7 @@ part of hetimaregex;
 
 
 class RegexParser {
+
   Future<RegexVM> compile(String source) async {
     Completer<RegexVM> completer = new Completer();
     RegexLexer lexer = new RegexLexer();

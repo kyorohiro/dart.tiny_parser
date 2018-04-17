@@ -8,6 +8,10 @@ class RegexVM {
     _commands = new List.from(command);
   }
 
+  factory RegexVM.createFromPattern(String pattern) {
+    return (new RegexParser()).compileSync(pattern);
+  }
+
   void addCommand(RegexCommand command) {
     _commands.add(command);
   }

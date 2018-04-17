@@ -10,5 +10,7 @@ import 'parser.dart';
 part 'sample/percentencode.dart';
 part 'sample/bencode.dart';
 part 'sample/bencode_async.dart';
-
+part 'sample/httpparser.dart';
+part 'sample/httpurl.dart';
+part 'sample/ipconv.dart';
 

@@ -9,6 +9,8 @@ import 'parser.dart';
 
 //
 import 'package:tiny_parser/parser.dart' as pars;
+import 'package:tiny_parser/regex.dart' as reg;
+
 import 'dart:convert' as conv;
 import 'dart:async';
 //

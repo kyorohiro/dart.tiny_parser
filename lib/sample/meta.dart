@@ -24,7 +24,7 @@ class MarkdownData {
 
 class Metadata {
   pars.ParserByteBuffer reader;
-  pars.Parser parser;
+  pars.TinyParser parser;
   Map<String,String> metadata = {};
   String content = "";
 
@@ -34,7 +34,7 @@ class Metadata {
   Future<int> parse(String source) async {
     content = source;
     reader = new pars.ParserByteBuffer();
-    parser = new pars.Parser(reader);
+    parser = new pars.TinyParser(reader);
     reader.addBytes(conv.UTF8.encode(source));
     reader.loadCompleted = true;
     int ret = await encMetadata(parser);
@@ -42,14 +42,13 @@ class Metadata {
     return ret;
   }
 
-  Future<int> encMetadata(pars.Parser parser) async {
+  Future<int> encMetadata(pars.TinyParser parser) async {
     try {
       parser.push();
 
       //
       // --- crlf
       await parser.nextString("---");await encSpace(parser);await encCrlf(parser);
-
       //
       // <xxx> : <yyy> crlf
       do{
@@ -70,7 +69,7 @@ class Metadata {
     }
   }
 
-  Future<bool> encKeyVaklue(pars.Parser parser) async {
+  Future<bool> encKeyVaklue(pars.TinyParser parser) async {
     String k = await encKey(parser);
     await parser.nextString(":");
     var v = await encValue(parser);
@@ -79,7 +78,7 @@ class Metadata {
     metadata[k] = v;
   }
 
-  Future<String> encKey(pars.Parser parser) async {
+  Future<String> encKey(pars.TinyParser parser) async {
     int start = parser.index;
     int end = parser.index;
     if(0!=await parser.checkString(" ")) {
@@ -89,7 +88,7 @@ class Metadata {
     return conv.UTF8.decode(v, allowMalformed: true);
   }
 
-  Future<String> encValue(pars.Parser parser) async {
+  Future<String> encValue(pars.TinyParser parser) async {
     List<int> v = await parser.matchBytesFromBytes(conv.UTF8.encode("\r\n"), expectedMatcherResult: false);
     String ret = conv.UTF8.decode(v);
 
@@ -104,7 +103,7 @@ class Metadata {
     }
   }
 
-  Future<String> encCrlf(pars.Parser parser) async {
+  Future<String> encCrlf(pars.TinyParser parser) async {
     int nextIndex = 0;
     if( 0!= (nextIndex= parser.checkString("\r\n")) || 0!=(nextIndex = parser.checkString("\n"))) {
       parser.resetIndex(parser.index +nextIndex);
@@ -114,14 +113,10 @@ class Metadata {
     }
   }
 
-  Future<bool> encSpace(pars.Parser parser) async {
+  Future<bool> encSpace(pars.TinyParser parser) async {
     try {
-      do {
-        List<int> v = parser.matchBytesFromBytes(conv.UTF8.encode(" \t"));
-        if(v.length == 0) {
-          break;
-        }
-      } while(true);
+      reg.RegexVM vm = await (new reg.RegexParser()).compile("( )*|(\t)*");
+      await vm.lookingAtFromEasyParser(parser);
       return true;
     } catch(e) {
       return false;

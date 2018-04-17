@@ -18,7 +18,7 @@ void main() {
               "a:b\r\n"  // 5-10
               "test:test\r\n" // 11-22
               "---\r\n"
-              "# test\r\n"
+              "#  test\r\n"
               "Game programming\r\n");
       expect(markdownData.metadata["a"], "b");
       expect(markdownData.metadata["test"], "test");

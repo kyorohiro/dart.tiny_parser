@@ -2,7 +2,7 @@ part of hetimaparsr;
 
 typedef bool ParserMatchFunc(int target);
 
-class Parser {
+class TinyParser {
 
   bool logon = false;
   int _index = 0;
@@ -16,7 +16,7 @@ class Parser {
   MemoryBuffer _cache;
   convert.Utf8Decoder _utfDecoder = new convert.Utf8Decoder(allowMalformed: true);
 
-  Parser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
+  TinyParser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
     _buffer = builder;
     if(cacheSize < 256) {
       cacheSize = 256;
@@ -24,8 +24,8 @@ class Parser {
     _cache = new MemoryBuffer(cacheSize);
   }
 
-  Parser toClone() {
-    Parser parser = new Parser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
+  TinyParser toClone() {
+    TinyParser parser = new TinyParser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
     parser._index = index;
     parser._stack = new List.from(_stack);
     return parser;

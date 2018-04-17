@@ -2,7 +2,7 @@ part of hetimaregex;
 
 class AllCharCommand extends RegexCommand {
   @override
-  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     parser.readByteAsync().then((int v) {
       vm._currentTask._nextCommandLocation += 1;
@@ -19,7 +19,7 @@ class AllCharCommand extends RegexCommand {
 
 class EmptyCommand extends RegexCommand {
   @override
-  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     vm._currentTask._nextCommandLocation += 1;
     c.complete([]);
@@ -37,7 +37,7 @@ class MatchByteCommand extends RegexCommand {
   }
 
   @override
-  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     parser.readByteAsync().then((int v) {
       for(int d in target) {
@@ -62,7 +62,7 @@ class UnmatchByteCommand extends RegexCommand {
   }
 
   @override
-  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     parser.readByteAsync().then((int v) {
       for(int d in target) {
@@ -86,7 +86,7 @@ class UncharacterCommand extends RegexCommand {
   }
 
   @override
-  Future<List<int>> check(RegexVM vm, heti.Parser parser) {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     int length = without.length;
     parser.push();

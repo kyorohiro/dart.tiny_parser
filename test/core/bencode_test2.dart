@@ -1,7 +1,7 @@
 import 'package:test/test.dart' as unit;
 import 'package:tiny_parser/data.dart' as hetima;
 import 'package:tiny_parser/parser.dart' as hetima;
-import 'package:tiny_parser/util.dart' as hetima;
+import 'package:tiny_parser/sample.dart' as hetima;
 import 'dart:typed_data' as type;
 import 'dart:convert' as convert;
 import 'dart:async';
@@ -13,7 +13,7 @@ void main() {
       type.Uint8List out = hetima.Bencode.encode(1024);
       unit.expect("i1024e", convert.UTF8.decode(out.toList()));
       hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-      hetima.EasyParser parser = new hetima.EasyParser(builder);
+      hetima.TinyParser parser = new hetima.TinyParser(builder);
       Future e = hetima.BencodeAsync.decode(parser).then((Object o) {
         int v = o;
         unit.expect(v,1024);
@@ -24,7 +24,7 @@ void main() {
 
     unit.test("number e1", (){
       hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-      hetima.EasyParser parser = new hetima.EasyParser(builder);
+      hetima.TinyParser parser = new hetima.TinyParser(builder);
       Future e = hetima.BencodeAsync.decode(parser)
       .then((Object o) {
         unit.expect(true, false);
@@ -39,7 +39,7 @@ void main() {
   });
   unit.test("number e2", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     Future e = hetima.BencodeAsync.decode(parser)
     .then((Object o) {
       unit.expect(true, false);
@@ -52,7 +52,7 @@ void main() {
 
   unit.test("number e3", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BencodeAsync.decode(parser)
     .then((Object o) {
       unit.expect(true, false);
@@ -67,7 +67,7 @@ void main() {
   unit.test("string", (){
     type.Uint8List out = hetima.Bencode.encode("hetimatan");
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
 
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeString(parser).then((Object o) {
@@ -80,7 +80,7 @@ void main() {
 
   unit.test("string e1", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
 
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeString(parser).then((Object o) {
@@ -96,7 +96,7 @@ void main() {
 
   unit.test("string e2", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
 
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeString(parser).then((Object o) {
@@ -112,7 +112,7 @@ void main() {
 
   unit.test("string e3", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
 
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeString(parser).then((Object o) {
@@ -133,7 +133,7 @@ void main() {
     unit.expect("l4:testi1024ee", convert.UTF8.decode(out.toList()));
 
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeList(parser).then((List<Object> o) {
       unit.expect(convert.UTF8.decode(o[0]), "test");
@@ -146,7 +146,7 @@ void main() {
   });
   unit.test("list e1", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     decoder.decodeList(parser).then((List<Object> o) {
       unit.expect(true, false);
@@ -160,7 +160,7 @@ void main() {
 
   unit.test("list e2", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     decoder.decodeList(parser).then((List<Object> o) {
       unit.expect(true, false);
@@ -174,7 +174,7 @@ void main() {
 
   unit.test("list e3", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     decoder.decodeList(parser).then((List<Object> o) {
       unit.expect(true, false);
@@ -195,7 +195,7 @@ void main() {
     unit.expect("d4:test4:test5:valuei1024ee", convert.UTF8.decode(out.toList()));
 
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeDiction(parser).then((Map dict) {
       unit.expect(convert.UTF8.decode(dict["test"]),"test");
@@ -207,7 +207,7 @@ void main() {
 
   unit.test("dictionary e1", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeDiction(parser).then((Map dict) {
       unit.expect(true, false);
@@ -222,7 +222,7 @@ void main() {
 
   unit.test("dictionary e2", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeDiction(parser).then((Map dict) {
       unit.expect(true, false);
@@ -237,7 +237,7 @@ void main() {
 
   unit.test("dictionary e3", (){
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
-    hetima.EasyParser parser = new hetima.EasyParser(builder);
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeDiction(parser).then((Map dict) {
       unit.expect(true, false);

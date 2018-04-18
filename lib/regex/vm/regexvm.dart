@@ -8,6 +8,10 @@ class RegexVM {
     _commands = new List.from(command);
   }
 
+  factory RegexVM.createFromPattern(String pattern) {
+    return (new RegexParser()).compileSync(pattern);
+  }
+
   void addCommand(RegexCommand command) {
     _commands.add(command);
   }
@@ -55,11 +59,11 @@ class RegexVM {
   }
 
   Future<List<List<int>>> lookingAt(List<int> text) {
-    heti.EasyParser parser = new heti.EasyParser(new heti.ParserByteBuffer.fromList(text, true));
+    heti.TinyParser parser = new heti.TinyParser(new heti.ParserByteBuffer.fromList(text, true));
     return lookingAtFromEasyParser(parser);
   }
 
-  Future<List<List<int>>> lookingAtFromEasyParser(heti.EasyParser parser) {
+  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) {
     Completer completer = new Completer();
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
 

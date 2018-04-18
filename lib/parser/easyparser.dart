@@ -1,9 +1,10 @@
 part of hetimaparsr;
 
-typedef bool EasyParserMatchFunc(int target);
-class EasyParser {
-  bool logon = false;
+typedef bool ParserMatchFunc(int target);
 
+class TinyParser {
+
+  bool logon = false;
   int _index = 0;
   int get index => _index;
   void resetIndex(int __index) {_index = __index;} //[TODO]
@@ -15,7 +16,7 @@ class EasyParser {
   MemoryBuffer _cache;
   convert.Utf8Decoder _utfDecoder = new convert.Utf8Decoder(allowMalformed: true);
 
-  EasyParser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
+  TinyParser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
     _buffer = builder;
     if(cacheSize < 256) {
       cacheSize = 256;
@@ -23,8 +24,8 @@ class EasyParser {
     _cache = new MemoryBuffer(cacheSize);
   }
 
-  EasyParser toClone() {
-    EasyParser parser = new EasyParser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
+  TinyParser toClone() {
+    TinyParser parser = new TinyParser(new ParserReaderWithIndex(_buffer, 0), cacheSize: _cache.bufferSize);
     parser._index = index;
     parser._stack = new List.from(_stack);
     return parser;
@@ -211,7 +212,7 @@ class EasyParser {
 
   //
   //
-  FutureOr<int> checkBytesFromMatcher(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true}) {
+  FutureOr<int> checkBytesFromMatcher(ParserMatchFunc matcher, {bool expectedMatcherResult:true}) {
     int r = checkBytesFromMatcherSync(matcher, expectedMatcherResult:expectedMatcherResult);
     if (r == 0 && _buffer.currentSize > index) {
       return r;
@@ -223,7 +224,7 @@ class EasyParser {
     }
   }
 
-  Future<int> checkBytesFromMatcherAsync(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) async {
+  Future<int> checkBytesFromMatcherAsync(ParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) async {
     int nextByte = 0;
     int length = 0;
     while(true) ROOT:{
@@ -245,7 +246,7 @@ class EasyParser {
     return length;
   }
 
-  int checkBytesFromMatcherSync(EasyParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) {
+  int checkBytesFromMatcherSync(ParserMatchFunc matcher, {bool expectedMatcherResult:true, int length:0}) {
     int nextByte = 0;
     while(true) ROOT:{
       if (_buffer.currentSize > index) {
@@ -304,7 +305,7 @@ class EasyParser {
     }
   }
 
-  FutureOr<List<int>> matchBytesFromMatche(EasyParserMatchFunc func, {bool expectedMatcherResult:true}) {
+  FutureOr<List<int>> matchBytesFromMatche(ParserMatchFunc func, {bool expectedMatcherResult:true}) {
     FutureOr<int> lenFOr = checkBytesFromMatcher(func, expectedMatcherResult:expectedMatcherResult);
     if(lenFOr is Future<int>) {
       return lenFOr.then((int len) {
@@ -382,25 +383,22 @@ class EasyParser {
 
   //
   //
-  FutureOr<String> readSign(int byteLength, {moveOffset:true}) {
+  FutureOr<String> readString(int byteLength, {moveOffset:true}) {
     if(_buffer.currentSize >= index+byteLength) {
-      return readSignSync(byteLength, moveOffset: moveOffset);
+      return readStringSync(byteLength, moveOffset: moveOffset);
     } else {
-      return readSignAsync(byteLength, moveOffset: moveOffset);
+      return readStringAsync(byteLength, moveOffset: moveOffset);
     }
   }
 
-  Future<String> readSignAsync(int byteLength, {moveOffset:true}) async {
+  Future<String> readStringAsync(int byteLength, {moveOffset:true}) async {
     await waitByBuffered(index, byteLength, checkLength: true);
-    return readSignSync(byteLength, moveOffset: moveOffset);
+    return readStringSync(byteLength, moveOffset: moveOffset);
   }
 
-  String readSignSync(int byteLength, {moveOffset:true}) {
-    List<int> va = getBytesSync(byteLength);
+  String readStringSync(int byteLength, {moveOffset:true}) {
+    List<int> va = getBytesSync(byteLength, moveOffset:moveOffset);
     String ret = _utfDecoder.convert(va, 0, byteLength);
-    if(moveOffset) {
-      _index += byteLength;
-    }
     return ret;
   }
 

@@ -1,0 +1,35 @@
+//import 'package:unittest/unittest.dart' as unit;
+import 'package:tiny_parser/data.dart' as hetima;
+import 'package:tiny_parser/parser.dart' as hetima;
+import 'dart:async';
+import 'package:test/test.dart' as unit;
+import 'package:tiny_parser/sample.dart' as hetima;
+
+void main() {
+  unit.test("request-line", () async {
+    hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
+    Future<hetima.HetiRequestLine> ret = hetima.HetiHttpResponse.decodeRequestLine(parser);
+    builder.appendString("GET /xxx/yy/zz HTTP/1.1\r\n");
+    unit.expect("GET",(await ret).method);
+    unit.expect("HTTP/1.1",(await ret).httpVersion);
+    unit.expect("/xxx/yy/zz",(await ret).requestTarget);
+  });
+
+  unit.test("request message",() async{
+    hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
+    hetima.TinyParser parser = new hetima.TinyParser(builder);
+    Future<hetima.HetiHttpRequestHead> ret = hetima.HetiHttpResponse.decodeRequestMessage(parser);
+    builder.appendString("GET /xxx/yy/zz HTTP/1.1\r\n");
+    builder.appendString("aaa: bb\r\n");
+    builder.appendString("ccc: ddd\r\n");
+    builder.appendString("\r\n");
+    //builder.fin();
+    builder.loadCompleted = true;
+    unit.expect("GET", (await ret).line.method);
+    unit.expect("HTTP/1.1", (await ret).line.httpVersion);
+    unit.expect("/xxx/yy/zz", (await ret).line.requestTarget);
+    unit.expect("bb", (await ret).find("aaa").fieldValue);
+    unit.expect("ddd", (await ret).find("ccc").fieldValue);
+  });
+}

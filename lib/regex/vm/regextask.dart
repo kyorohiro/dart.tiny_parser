@@ -40,36 +40,30 @@ class RegexTask {
     }
   }
 
-  Future<List<int>> executeNextCommand(RegexVM vm) {
-    Completer<List<int>> completer = new Completer();
+  Future<List<int>> executeNextCommand(RegexVM vm) async {
     if (_nextCommandLocation >= vm._commands.length) {
-      completer.completeError(new Exception(""));
-      return completer.future;
+      throw "";
     }
     RegexCommand c = vm._commands[_nextCommandLocation];
-    c.check(vm, _parseHelperWithTargetSource).then((List<int> v) {
-      completer.complete(v);
-    }).catchError((e) {
-      completer.completeError(e);
-    });
-    return completer.future;
+    try {
+      return await c.check(vm, _parseHelperWithTargetSource);
+    }catch(e) {
+      throw e;
+    }
   }
 
-  Future<List<List<int>>> lookingAt(RegexVM vm) {
-    Completer<List<List<int>>> completer = new Completer();
-    loop() {
-      return executeNextCommand(vm).then((List<int> matchedData) {
+  Future<List<List<int>>> lookingAt(RegexVM vm) async {
+    do {
+      try {
+        List<int> matchedData = await executeNextCommand(vm);
         tryAddMemory(matchedData);
-        return loop();
-      }).catchError((e) {
+      } catch(e) {
         if (e is MatchCommandNotification) {
-          completer.complete(_memory);
+          return _memory;
         } else {
-          completer.completeError(e);
+          throw e;
         }
-      });
-    }
-    loop();
-    return completer.future;
+      }
+    } while(true);
   }
 }

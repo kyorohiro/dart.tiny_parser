@@ -9,22 +9,22 @@ class RegexTask {
   List<int> _currentMemoryTargetId = [];
   int _nextMemoryId = 0;
 
-  RegexTask.clone(RegexTask tasl, [int commandPos = -1]) {
+  RegexTask.clone(RegexTask task, [int commandPos = -1]) {
     if (commandPos != -1) {
       this._nextCommandLocation = commandPos;
     } else {
-      this._nextCommandLocation = tasl._nextCommandLocation;
+      this._nextCommandLocation = task._nextCommandLocation;
     }
-    this._parseHelperWithTargetSource = tasl._parseHelperWithTargetSource.toClone();
+    this._parseHelperWithTargetSource = task._parseHelperWithTargetSource.toClone();
     {
       //deep copy
       this._memory = [];
-      for(List<int> v in tasl._memory) {
+      for(List<int> v in task._memory) {
         this._memory.add(new List.from(v));
       }
     }
-    this._currentMemoryTargetId = new List.from(tasl._currentMemoryTargetId);
-    this._nextMemoryId = tasl._nextMemoryId;
+    this._currentMemoryTargetId = new List.from(task._currentMemoryTargetId);
+    this._nextMemoryId = task._nextMemoryId;
   }
 
   RegexTask.fromCommnadPos(int commandPos, heti.TinyParser parser) {
@@ -45,11 +45,7 @@ class RegexTask {
       throw "";
     }
     RegexCommand c = vm._commands[_nextCommandLocation];
-    try {
-      return await c.check(vm, _parseHelperWithTargetSource);
-    }catch(e) {
-      throw e;
-    }
+    return await c.check(vm, _parseHelperWithTargetSource);
   }
 
   Future<List<List<int>>> lookingAt(RegexVM vm) async {

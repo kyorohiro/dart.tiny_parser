@@ -32,7 +32,7 @@ class RegexVM {
     return ret;
   }
 
-  bool get _haveCurrentTask {
+  bool hasCurrentTask() {
     if (_tasks.length > 0) {
       return true;
     } else {
@@ -40,8 +40,8 @@ class RegexVM {
     }
   }
 
-  RegexTask get _currentTask {
-    if (_haveCurrentTask) {
+  RegexTask getCurrentTask() {
+    if (hasCurrentTask()) {
       return _tasks[0];
     } else {
       throw new Exception("");
@@ -49,7 +49,7 @@ class RegexVM {
   }
 
   RegexTask _eraseCurrentTask() {
-    if (_haveCurrentTask) {
+    if (hasCurrentTask()) {
       RegexTask prevTask = _tasks[0];
       _tasks.removeAt(0);
       return prevTask;
@@ -66,12 +66,12 @@ class RegexVM {
   Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
     do {
-      if (!_haveCurrentTask) {
+      if (!hasCurrentTask()) {
         throw "";
       }
       try {
-        List<List<int>> v = await _currentTask.lookingAt(this);
-        parser.resetIndex(_currentTask._parseHelperWithTargetSource.index);
+        List<List<int>> v = await getCurrentTask().lookingAt(this);
+        parser.resetIndex(getCurrentTask()._parseHelperWithTargetSource.index);
         _tasks.clear();
         return v;
       } catch(e) {

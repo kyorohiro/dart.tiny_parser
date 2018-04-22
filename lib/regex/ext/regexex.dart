@@ -5,7 +5,7 @@ class AllCharCommand extends RegexCommand {
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
     parser.readByteAsync().then((int v) {
-      vm._currentTask._nextCommandLocation += 1;
+      vm.getCurrentTask()._nextCommandLocation += 1;
       c.complete([v]);
     }).catchError((e) {
       c.completeError(e);
@@ -21,7 +21,7 @@ class EmptyCommand extends RegexCommand {
   @override
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    vm._currentTask._nextCommandLocation += 1;
+    vm.getCurrentTask()._nextCommandLocation += 1;
     c.complete([]);
     return c.future;
   }
@@ -42,7 +42,7 @@ class MatchByteCommand extends RegexCommand {
     parser.readByteAsync().then((int v) {
       for(int d in target) {
         if(d == v) {
-          vm._currentTask._nextCommandLocation += 1;
+          vm.getCurrentTask()._nextCommandLocation += 1;
           c.complete([v]);
           return;
         }
@@ -71,7 +71,7 @@ class UnmatchByteCommand extends RegexCommand {
           return;
         }
       }
-      vm._currentTask._nextCommandLocation += 1;
+      vm.getCurrentTask()._nextCommandLocation += 1;
       c.complete([v]);     
     }).catchError((e) {
       c.completeError(e);
@@ -100,7 +100,7 @@ class UncharacterCommand extends RegexCommand {
       if (v.length == length) {
         for (int i = 0; i < length; i++) {
           if (v[i] != without[i]) {
-            vm._currentTask._nextCommandLocation += 1;
+            vm.getCurrentTask()._nextCommandLocation += 1;
             parser.resetIndex(parser.index + 1);
             c.complete([v[0]]);
             return;
@@ -109,7 +109,7 @@ class UncharacterCommand extends RegexCommand {
         c.completeError(new Exception());
       } else {
         // todo
-        vm._currentTask._nextCommandLocation += 1;
+        vm.getCurrentTask()._nextCommandLocation += 1;
         parser.resetIndex(parser.index + 1);
         c.complete([v[0]]);
         return;

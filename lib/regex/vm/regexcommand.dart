@@ -7,7 +7,7 @@ abstract class RegexCommand {
 class MemoryStartCommand extends RegexCommand {
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     int index = currentTask._nextMemoryId;
     currentTask._nextMemoryId++;
     currentTask._memory.add([]);
@@ -25,7 +25,7 @@ class MemoryStartCommand extends RegexCommand {
 class MemoryStopCommand extends RegexCommand {
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     currentTask._currentMemoryTargetId.removeLast();
     currentTask._nextCommandLocation++;
     c.complete([]);
@@ -66,7 +66,7 @@ class JumpTaskCommand extends RegexCommand {
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     if (currentTask == null) {
       throw new Exception("");
     }
@@ -98,7 +98,7 @@ class SplitTaskCommand extends RegexCommand {
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     if (currentTask == null) {
       throw new Exception("");
     }
@@ -142,7 +142,7 @@ class CharCommand extends RegexCommand {
         }
       }
       parser.pop();
-      RegexTask t = vm._currentTask;
+      RegexTask t = vm.getCurrentTask();
       t._nextCommandLocation++;
       c.complete(v);
     });

@@ -63,25 +63,20 @@ class RegexVM {
     return lookingAtFromEasyParser(parser);
   }
 
-  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) {
-    Completer completer = new Completer();
+  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
-
-    loop() {
+    do {
       if (!_haveCurrentTask) {
-        completer.completeError(new Exception());
-        return;
+        throw "";
       }
-      _currentTask.lookingAt(this).then((List<List<int>> v) {
+      try {
+        List<List<int>> v = await _currentTask.lookingAt(this);
         parser.resetIndex(_currentTask._parseHelperWithTargetSource.index);
         _tasks.clear();
-        completer.complete(v);
-      }).catchError((e) {
+        return v;
+      } catch(e) {
         _eraseCurrentTask();
-        loop();
-      });
-    }
-    loop();
-    return completer.future;
+      }
+    } while(true);
   }
 }

@@ -122,31 +122,26 @@ class CharCommand extends RegexCommand {
     _expect = new List.from(v);
   }
 
-  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
-    Completer<List<int>> c = new Completer();
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
     int length = _expect.length;
     parser.push();
-    parser.getBytesAsync(length).then((List<int> v) {
-      if (v.length != length) {
+    List<int> v = await parser.getBytesAsync(length);
+    if (v.length != length) {
+      parser.back();
+      parser.pop();
+      throw new Exception("");
+    }
+    for (int i = 0; i < length; i++) {
+      if (_expect[i] != v[i]) {
         parser.back();
         parser.pop();
-        c.completeError(new Exception(""));
-        return;
+        throw new Exception("");
       }
-      for (int i = 0; i < length; i++) {
-        if (_expect[i] != v[i]) {
-          parser.back();
-          parser.pop();
-          c.completeError(new Exception(""));
-          return;
-        }
-      }
-      parser.pop();
-      RegexTask t = vm.getCurrentTask();
-      t._nextCommandLocation++;
-      c.complete(v);
-    });
-    return c.future;
+    }
+    parser.pop();
+    RegexTask t = vm.getCurrentTask();
+    t._nextCommandLocation++;
+    return v;
   }
 
   String toString() {

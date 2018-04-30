@@ -13,6 +13,7 @@ class RegexVM {
   }
 
   void addCommand(RegexCommand command) {
+    print(command.toString());
     _commands.add(command);
   }
 

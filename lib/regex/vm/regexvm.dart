@@ -64,20 +64,45 @@ class RegexVM {
     return lookingAtFromEasyParser(parser);
   }
 
-  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) async {
+  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser, {bool throwException:true}) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
     do {
       if (!hasCurrentTask()) {
-        throw "";
+        if(throwException) {
+          throw "";
+        } else {
+          return null;
+        }
       }
       try {
         List<List<int>> v = await getCurrentTask().lookingAt(this);
         parser.resetIndex(getCurrentTask()._parseHelperWithTargetSource.index);
         _tasks.clear();
+
+        print("xxxZZ ${v}");
         return v;
       } catch(e) {
         _eraseCurrentTask();
       }
     } while(true);
+  }
+
+  Future<List<int>> unmatchingAtFromEasyParser(heti.TinyParser parser) async {
+    Object ret;
+    int startIndex = parser.index;
+    int endIndex = parser.index;
+    do {
+      List<List<int>> ret = await lookingAtFromEasyParser(parser, throwException: false);
+      if(ret != null ) {
+        break;
+      } else {
+        endIndex = parser.index;
+      }
+      parser.moveOffset(1);
+    } while(ret == null);
+    parser.resetIndex(startIndex);
+    List<int> out = new List<int>(endIndex-startIndex);
+    parser.readBytes(endIndex-startIndex, out);
+    return out;
   }
 }

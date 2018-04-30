@@ -27,17 +27,20 @@ void script00() {
 */
 
     test('char true d', () {
-      pars.TinyParser p = new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("\r\nababc"), true));
 
       regex.RegexParser parser = new regex.RegexParser();
       return parser.compile("\n|\r\n").then((regex.RegexVM vm) {
-        print("zz");
-        print(vm.toString());
-        return vm.lookingAtFromEasyParser(p).then((List<List<int>> v){
-          print("xx = "+ p.index.toString());
+        pars.TinyParser p =
+        new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("ababc\r\n"), true));
 
-          expect(conv.UTF8.decode(v[0]),"ab");
-          expect(conv.UTF8.decode(v[1]),"ab");
+        print(vm.toString());
+/*        return vm.lookingAtFromEasyParser(p).then((List<List<int>> v){
+          print("xx = ${v}");
+          print("xx = "+ p.index.toString());
+        });*/
+        return vm.unmatchingAtFromEasyParser(p).then((List<int> v){
+          print("xx = "+ conv.UTF8.decode(v));
+          print("xx = "+ p.index.toString());
         });
       }).catchError((e) {
         expect(true, false);

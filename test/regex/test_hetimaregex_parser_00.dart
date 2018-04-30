@@ -90,6 +90,7 @@ void script00() {
     test('char true d', () {
       regex.RegexParser parser = new regex.RegexParser();
       return parser.compile("abc|def").then((regex.RegexVM vm) {
+        print("${vm}");
         return vm.lookingAt(conv.UTF8.encode("abcabc")).then((List<List<int>> v){
           expect(v.length,0);
         });

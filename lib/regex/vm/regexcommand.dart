@@ -52,6 +52,18 @@ class MatchCommand extends RegexCommand {
   }
 }
 
+class UnmatchCommand extends RegexCommand {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
+    Completer<List<int>> c = new Completer();
+    c.completeError(new Exception(""));
+    return c.future;
+  }
+  String toString() {
+    return "<unmatch>";
+  }
+}
+
+
 class JumpTaskCommand extends RegexCommand {
   static final int LM1 = -1;
   static final int L0 = 0;

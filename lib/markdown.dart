@@ -5,7 +5,7 @@ import 'parser.dart' as core;
 import 'regex.dart' as reg;
 import 'dart:convert' as conv;
 
-reg.RegexVM crlfReg = new reg.RegexVM.createFromPattern("(\r\n|\n|\0)");
+reg.RegexVM crlfReg = new reg.RegexVM.createFromPattern("(\r\n|\n|\$)");
 reg.RegexVM headingPrefixReg1 = new reg.RegexVM.createFromPattern("(#*)");
 reg.RegexVM headingPrefixReg2 = new reg.RegexVM.createFromPattern("(----*)");
 reg.RegexVM headingPrefixReg3 = new reg.RegexVM.createFromPattern("(====*)");
@@ -17,7 +17,7 @@ reg.RegexVM bold2Reg = new reg.RegexVM.createFromPattern("\\*\\*|\r\n|\n");
 
 reg.RegexVM spacePrefixReg = new reg.RegexVM.createFromPattern("( |\t)");
 
-reg.RegexVM paragraphReg = new reg.RegexVM.createFromPattern("(\r\n\r\n|\n\n|\0)");
+reg.RegexVM paragraphReg = new reg.RegexVM.createFromPattern("(\r\n\r\n|\n\n|\$)");
 
 reg.RegexVM listsPrefixReg1 = new reg.RegexVM.createFromPattern("( *|\t*)(-|+|\\*)( |\t)( *|\t*)");
 
@@ -64,8 +64,11 @@ class Paragraph {
   //
   // (!?\r\n\r\n|\n\n)(\r\n\r\n|\n\n|)
   //
-  Future<MarkdownObject> parse(parser) async {
+  Future<MarkdownObject> parse(core.TinyParser parser) async {
+    reg.RegexVM paragraphReg = new reg.RegexVM.createFromPattern("(\r\n\r\n|\n\n|\$)");
     List<int> value = await paragraphReg.unmatchingAtFromEasyParser(parser);
+    print(">>> ${value} ${parser.index}");
+    print(paragraphReg);
     await paragraphReg.lookingAtFromEasyParser(parser);
     return new ParagraphObject(conv.UTF8.decode(value));
   }

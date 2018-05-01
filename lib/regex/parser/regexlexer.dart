@@ -17,7 +17,6 @@ class RegexLexer {
               tokens.add(new RegexToken.fromChar(v, RegexToken.star));
               break;
             case 0x5c: // \
-              print("========> 0x5c");
               int vv = await parser.readByte();
               tokens.add(new RegexToken.fromChar(vv, RegexToken.character));
               break;
@@ -48,6 +47,9 @@ class RegexLexer {
       try {
         int v = parser.readByteSync();
         switch (v) {
+          case 0x24: // $
+            tokens.add(new RegexToken.fromChar(v, RegexToken.eof));
+            break;
           case 0x2a: // *
             tokens.add(new RegexToken.fromChar(v, RegexToken.star));
             break;

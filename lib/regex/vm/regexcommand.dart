@@ -135,6 +135,7 @@ class CharCommand extends RegexCommand {
   }
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
+    print("CHAR-----------${_expect}");
     int length = _expect.length;
     parser.push();
     List<int> v = await parser.getBytesAsync(length);
@@ -163,9 +164,11 @@ class CharCommand extends RegexCommand {
 
 class EOFCommand extends RegexCommand {
   EOFCommand() {
+    print("EOF-------==");
   }
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
+    print("EOF-----------");
     if(!parser.isEOF()) {
       throw "";
     }

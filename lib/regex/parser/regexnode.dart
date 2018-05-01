@@ -71,7 +71,7 @@ class StarPattern extends RegexNode {
 }
 
 class EOFPattern extends RegexNode {
-  EOFPattern.fromBytes() {
+  EOFPattern() {
   }
   List<RegexCommand> convertRegexCommands() {
     return [new EOFCommand()];

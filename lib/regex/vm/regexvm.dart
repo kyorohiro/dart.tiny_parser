@@ -67,6 +67,7 @@ class RegexVM {
   Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser, {bool throwException:true}) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
     do {
+      print(">>>>>>");
       if (!hasCurrentTask()) {
         if(throwException) {
           throw "";

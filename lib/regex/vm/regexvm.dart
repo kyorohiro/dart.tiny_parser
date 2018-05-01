@@ -13,6 +13,7 @@ class RegexVM {
   }
 
   void addCommand(RegexCommand command) {
+    //print(command.toString());
     _commands.add(command);
   }
 
@@ -32,7 +33,7 @@ class RegexVM {
     return ret;
   }
 
-  bool get _haveCurrentTask {
+  bool hasCurrentTask() {
     if (_tasks.length > 0) {
       return true;
     } else {
@@ -40,8 +41,8 @@ class RegexVM {
     }
   }
 
-  RegexTask get _currentTask {
-    if (_haveCurrentTask) {
+  RegexTask getCurrentTask() {
+    if (hasCurrentTask()) {
       return _tasks[0];
     } else {
       throw new Exception("");
@@ -49,7 +50,7 @@ class RegexVM {
   }
 
   RegexTask _eraseCurrentTask() {
-    if (_haveCurrentTask) {
+    if (hasCurrentTask()) {
       RegexTask prevTask = _tasks[0];
       _tasks.removeAt(0);
       return prevTask;
@@ -63,25 +64,57 @@ class RegexVM {
     return lookingAtFromEasyParser(parser);
   }
 
-  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser) {
-    Completer completer = new Completer();
+  Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser, {bool throwException:true}) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
-
-    loop() {
-      if (!_haveCurrentTask) {
-        completer.completeError(new Exception());
-        return;
+    do {
+      if (!hasCurrentTask()) {
+        if(throwException) {
+          throw "";
+        } else {
+          return null;
+        }
       }
-      _currentTask.lookingAt(this).then((List<List<int>> v) {
-        parser.resetIndex(_currentTask._parseHelperWithTargetSource.index);
+      try {
+        List<List<int>> v = await getCurrentTask().lookingAt(this);
+        parser.resetIndex(getCurrentTask()._parseHelperWithTargetSource.index);
         _tasks.clear();
-        completer.complete(v);
-      }).catchError((e) {
+
+        return v;
+      } catch(e) {
         _eraseCurrentTask();
-        loop();
-      });
-    }
-    loop();
-    return completer.future;
+      }
+    } while(true);
+  }
+
+  Future<List<int>> unmatchingAtFromEasyParser(heti.TinyParser parser) async {
+    //print(toString());
+    int startIndex = parser.index;
+    int endIndex = parser.index;
+    do {
+      endIndex = parser.index;
+      List<List<int>> ret = await lookingAtFromEasyParser(parser, throwException: false);
+      if(ret != null ) {
+        break;
+      }
+      //print(">> ${ret} ${parser.index}");
+
+      try {
+        await parser.moveOffset(1);
+      } catch(e) {
+        //EOF
+        break;
+      }
+    } while(true);
+    parser.resetIndex(startIndex);
+    List<int> out = new List<int>(endIndex-startIndex);
+    parser.readBytes(endIndex-startIndex, out);
+    return out;
+  }
+
+  Future<bool> isMatched(heti.TinyParser parser) async {
+    int backupIndex = parser.index;
+    bool ret = (await lookingAtFromEasyParser(parser, throwException: false) != null);
+    parser.resetIndex(backupIndex);
+    return ret;
   }
 }

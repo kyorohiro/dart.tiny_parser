@@ -7,7 +7,7 @@ abstract class RegexCommand {
 class MemoryStartCommand extends RegexCommand {
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     int index = currentTask._nextMemoryId;
     currentTask._nextMemoryId++;
     currentTask._memory.add([]);
@@ -25,7 +25,7 @@ class MemoryStartCommand extends RegexCommand {
 class MemoryStopCommand extends RegexCommand {
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     currentTask._currentMemoryTargetId.removeLast();
     currentTask._nextCommandLocation++;
     c.complete([]);
@@ -52,6 +52,18 @@ class MatchCommand extends RegexCommand {
   }
 }
 
+class UnmatchCommand extends RegexCommand {
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
+    Completer<List<int>> c = new Completer();
+    c.completeError(new Exception(""));
+    return c.future;
+  }
+  String toString() {
+    return "<unmatch>";
+  }
+}
+
+
 class JumpTaskCommand extends RegexCommand {
   static final int LM1 = -1;
   static final int L0 = 0;
@@ -66,7 +78,7 @@ class JumpTaskCommand extends RegexCommand {
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     if (currentTask == null) {
       throw new Exception("");
     }
@@ -98,7 +110,7 @@ class SplitTaskCommand extends RegexCommand {
 
   Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
     Completer<List<int>> c = new Completer();
-    RegexTask currentTask = vm._currentTask;
+    RegexTask currentTask = vm.getCurrentTask();
     if (currentTask == null) {
       throw new Exception("");
     }
@@ -122,34 +134,47 @@ class CharCommand extends RegexCommand {
     _expect = new List.from(v);
   }
 
-  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) {
-    Completer<List<int>> c = new Completer();
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
     int length = _expect.length;
     parser.push();
-    parser.getBytesAsync(length).then((List<int> v) {
-      if (v.length != length) {
+    List<int> v = await parser.getBytesAsync(length);
+    if (v.length != length) {
+      parser.back();
+      parser.pop();
+      throw new Exception("");
+    }
+    for (int i = 0; i < length; i++) {
+      if (_expect[i] != v[i]) {
         parser.back();
         parser.pop();
-        c.completeError(new Exception(""));
-        return;
+        throw new Exception("");
       }
-      for (int i = 0; i < length; i++) {
-        if (_expect[i] != v[i]) {
-          parser.back();
-          parser.pop();
-          c.completeError(new Exception(""));
-          return;
-        }
-      }
-      parser.pop();
-      RegexTask t = vm._currentTask;
-      t._nextCommandLocation++;
-      c.complete(v);
-    });
-    return c.future;
+    }
+    parser.pop();
+    RegexTask t = vm.getCurrentTask();
+    t._nextCommandLocation++;
+    return v;
   }
 
   String toString() {
     return "<char ${_expect}>";
+  }
+}
+
+class EOFCommand extends RegexCommand {
+  EOFCommand() {
+  }
+
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
+    if(!parser.isEOF()) {
+      throw "";
+    }
+    RegexTask t = vm.getCurrentTask();
+    t._nextCommandLocation++;
+    return [];
+  }
+
+  String toString() {
+    return "<eof>";
   }
 }

@@ -70,6 +70,14 @@ class StarPattern extends RegexNode {
   }
 }
 
+class EOFPattern extends RegexNode {
+  EOFPattern() {
+  }
+  List<RegexCommand> convertRegexCommands() {
+    return [new EOFCommand()];
+  }
+}
+
 class GroupPattern extends RegexNode {
   bool _isSaveInMemory = false;
 
@@ -133,12 +141,13 @@ class GroupPattern extends RegexNode {
           currentLength += 1;
           ret.addAll(tmp[i]);
           currentLength += tmp[i].length;
-          ret.add(new JumpTaskCommand.create(commandLength - currentLength));
+          ret.add(new JumpTaskCommand.create(commandLength - currentLength-1));
           currentLength += 1;
         } else {
-          ret.add(new SplitTaskCommand.create(1, tmp[i].length + 1));
-          currentLength += 1;
+          //ret.add(new SplitTaskCommand.create(1, tmp[i].length + 1));
+          //currentLength += 1;
           ret.addAll(tmp[i]);
+          //ret.add(new UnmatchCommand());
           currentLength += tmp[i].length;
         }
       }

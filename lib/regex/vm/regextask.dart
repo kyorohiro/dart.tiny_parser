@@ -9,22 +9,22 @@ class RegexTask {
   List<int> _currentMemoryTargetId = [];
   int _nextMemoryId = 0;
 
-  RegexTask.clone(RegexTask tasl, [int commandPos = -1]) {
+  RegexTask.clone(RegexTask task, [int commandPos = -1]) {
     if (commandPos != -1) {
       this._nextCommandLocation = commandPos;
     } else {
-      this._nextCommandLocation = tasl._nextCommandLocation;
+      this._nextCommandLocation = task._nextCommandLocation;
     }
-    this._parseHelperWithTargetSource = tasl._parseHelperWithTargetSource.toClone();
+    this._parseHelperWithTargetSource = task._parseHelperWithTargetSource.toClone();
     {
       //deep copy
       this._memory = [];
-      for(List<int> v in tasl._memory) {
+      for(List<int> v in task._memory) {
         this._memory.add(new List.from(v));
       }
     }
-    this._currentMemoryTargetId = new List.from(tasl._currentMemoryTargetId);
-    this._nextMemoryId = tasl._nextMemoryId;
+    this._currentMemoryTargetId = new List.from(task._currentMemoryTargetId);
+    this._nextMemoryId = task._nextMemoryId;
   }
 
   RegexTask.fromCommnadPos(int commandPos, heti.TinyParser parser) {
@@ -40,36 +40,26 @@ class RegexTask {
     }
   }
 
-  Future<List<int>> executeNextCommand(RegexVM vm) {
-    Completer<List<int>> completer = new Completer();
+  Future<List<int>> executeNextCommand(RegexVM vm) async {
     if (_nextCommandLocation >= vm._commands.length) {
-      completer.completeError(new Exception(""));
-      return completer.future;
+      throw "";
     }
     RegexCommand c = vm._commands[_nextCommandLocation];
-    c.check(vm, _parseHelperWithTargetSource).then((List<int> v) {
-      completer.complete(v);
-    }).catchError((e) {
-      completer.completeError(e);
-    });
-    return completer.future;
+    return await c.check(vm, _parseHelperWithTargetSource);
   }
 
-  Future<List<List<int>>> lookingAt(RegexVM vm) {
-    Completer<List<List<int>>> completer = new Completer();
-    loop() {
-      return executeNextCommand(vm).then((List<int> matchedData) {
+  Future<List<List<int>>> lookingAt(RegexVM vm) async {
+    do {
+      try {
+        List<int> matchedData = await executeNextCommand(vm);
         tryAddMemory(matchedData);
-        return loop();
-      }).catchError((e) {
+      } catch(e) {
         if (e is MatchCommandNotification) {
-          completer.complete(_memory);
+          return _memory;
         } else {
-          completer.completeError(e);
+          throw e;
         }
-      });
-    }
-    loop();
-    return completer.future;
+      }
+    } while(true);
   }
 }

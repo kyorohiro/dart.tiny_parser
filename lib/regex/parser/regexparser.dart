@@ -17,6 +17,9 @@ class RegexParser {
         case RegexToken.character:
           stack.last.addRegexNode(new CharacterPattern.fromBytes([t.value]));
           break;
+        case RegexToken.eof:
+          stack.last.addRegexNode(new EOFPattern());
+          break;
         case RegexToken.lparan:
           GroupPattern l = new GroupPattern(isSaveInMemory:true);
           stack.last.addRegexNode(l);
@@ -51,6 +54,9 @@ class RegexParser {
       switch (t.kind) {
         case RegexToken.character:
           stack.last.addRegexNode(new CharacterPattern.fromBytes([t.value]));
+          break;
+        case RegexToken.eof:
+          stack.last.addRegexNode(new EOFPattern());
           break;
         case RegexToken.lparan:
           GroupPattern l = new GroupPattern(isSaveInMemory:true);

@@ -39,6 +39,12 @@ class TinyParser {
 
   FutureOr<List<int>> peekBytes(int length) => _buffer.getBytes(index, length);
 
+  bool isEOF() {
+    if(!_buffer.loadCompleted) {
+      return false;
+    }
+    return (this.index >= _buffer.currentSize);
+  }
   //
   //
   FutureOr<int> moveOffset(int moveBytes) async {
@@ -341,7 +347,7 @@ class TinyParser {
   List<int> getBytesSync(int length, {moveOffset:true}) {
     List<int> out = new data.Uint8List(length >= 0 ? length : 0);
     for (int i = 0; i < length; i++) {
-      print("${i} ${out.length} ${_buffer.currentSize} ${index} ${length}");
+      //print("${i} ${out.length} ${_buffer.currentSize} ${index} ${length}");
       out[i] = _buffer[index + i];
     }
     if(moveOffset) {

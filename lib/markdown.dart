@@ -24,9 +24,13 @@ reg.RegexVM listsPrefixReg1 = new reg.RegexVM.createFromPattern("( *|\t*)(-|+|\\
 
 class Markdown {
 
-  Stream<MarkdownObject> parse(String src) {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode(src));
-    core.TinyParser parser = new core.TinyParser(buffer);
+  Stream<MarkdownObject> parseFromParser(core.TinyParser parser) async *{
+    // extract block
+    Paragraph paragraph = new Paragraph();
+    while(!parser.isEOF()) {
+      MarkdownObject obj = await paragraph.parse(parser);
+      yield obj;
+    }
   }
 
 }

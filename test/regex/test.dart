@@ -11,33 +11,20 @@ void main() => script00();
 void script00() {
   print("xx");
   group('parser00', () {
-    /*
     test('char true a', () {
-      pars.Parser parser = new pars.Parser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("aabb"), true));
-      regex.RegexParser regParser = new regex.RegexParser();
-      return regParser.compile("a").then((regex.RegexVM vm) {
-        return vm.lookingAtFromEasyParser(parser).then((List<List<int>> v){
-          print("xx = "+ parser.index.toString());
-          expect(true, true);
-        });
-      }).catchError((e) {
-        expect(true, false);
-      });
+      regex.RegexVM italic1Reg = new regex.RegexVM.createFromPattern("\\*");
     });
-*/
-
+  });
+/*
     test('char true d', () {
 
       regex.RegexParser parser = new regex.RegexParser();
       return parser.compile("\n|\r\n").then((regex.RegexVM vm) {
         pars.TinyParser p =
-        new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("ababc\r\n"), true));
+        new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("ababc"), true));
 
         print(vm.toString());
-/*        return vm.lookingAtFromEasyParser(p).then((List<List<int>> v){
-          print("xx = ${v}");
-          print("xx = "+ p.index.toString());
-        });*/
+
         return vm.unmatchingAtFromEasyParser(p).then((List<int> v){
           print("xx = "+ conv.UTF8.decode(v));
           print("xx = "+ p.index.toString());
@@ -47,6 +34,7 @@ void script00() {
       });
     });
   });
+  */
 }
 
 //commentLong()

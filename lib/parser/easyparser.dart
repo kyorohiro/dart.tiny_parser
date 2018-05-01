@@ -39,6 +39,12 @@ class TinyParser {
 
   FutureOr<List<int>> peekBytes(int length) => _buffer.getBytes(index, length);
 
+  bool isEOF() {
+    if(!_buffer.loadCompleted) {
+      return false;
+    }
+    return (this.index >= _buffer.currentSize);
+  }
   //
   //
   FutureOr<int> moveOffset(int moveBytes) async {

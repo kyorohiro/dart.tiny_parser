@@ -67,8 +67,6 @@ class Paragraph {
   Future<MarkdownObject> parse(core.TinyParser parser) async {
     reg.RegexVM paragraphReg = new reg.RegexVM.createFromPattern("(\r\n\r\n|\n\n|\$)");
     List<int> value = await paragraphReg.unmatchingAtFromEasyParser(parser);
-    print(">>> ${value} ${parser.index}");
-    print(paragraphReg);
     await paragraphReg.lookingAtFromEasyParser(parser);
     return new ParagraphObject(conv.UTF8.decode(value));
   }

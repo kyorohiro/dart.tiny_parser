@@ -9,19 +9,12 @@ import 'dart:convert' as conv;
 
 void main() {
 
-  unit.test("block", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("==="));
-    core.TinyParser parser = new core.TinyParser(buffer);
-    parser.buffer.loadCompleted = true;
-    markd.Paragraph paragraph = new markd.Paragraph();
-    markd.ParagraphObject object = await paragraph.parse(parser);
-    unit.expect(object.value, "===");
-  });
-/*
+
   unit.test("main", () async {
     core.ParserByteBuffer buffer =
       new core.ParserByteBuffer.fromList(conv.UTF8.encode(
-          "# sdf\r\n\r\n asdfasdf\r\n\r\n\0"));
+          "# sdf\r\n\r\n asdfasdf\r\n\r\n"));
+    buffer.loadCompleted = true;
     core.TinyParser parser = new core.TinyParser(buffer);
 
     markd.Markdown markdown = new markd.Markdown();
@@ -30,7 +23,7 @@ void main() {
     }
 
   });
-
+/*
   unit.test("heading1", () async {
     core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("# sdf\r\n"));
     core.TinyParser parser = new core.TinyParser(buffer);

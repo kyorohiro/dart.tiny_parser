@@ -13,7 +13,7 @@ class RegexVM {
   }
 
   void addCommand(RegexCommand command) {
-    print(command.toString());
+    //print(command.toString());
     _commands.add(command);
   }
 
@@ -67,7 +67,6 @@ class RegexVM {
   Future<List<List<int>>> lookingAtFromEasyParser(heti.TinyParser parser, {bool throwException:true}) async {
     _tasks.add(new RegexTask.fromCommnadPos(0, parser));
     do {
-      print(">>>>>>");
       if (!hasCurrentTask()) {
         if(throwException) {
           throw "";
@@ -88,7 +87,7 @@ class RegexVM {
   }
 
   Future<List<int>> unmatchingAtFromEasyParser(heti.TinyParser parser) async {
-    print(toString());
+    //print(toString());
     int startIndex = parser.index;
     int endIndex = parser.index;
     do {
@@ -97,7 +96,7 @@ class RegexVM {
       if(ret != null ) {
         break;
       }
-      print(">> ${ret} ${parser.index}");
+      //print(">> ${ret} ${parser.index}");
 
       try {
         await parser.moveOffset(1);

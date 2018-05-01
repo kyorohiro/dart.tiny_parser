@@ -160,3 +160,21 @@ class CharCommand extends RegexCommand {
     return "<char ${_expect}>";
   }
 }
+
+class EOFCommand extends RegexCommand {
+  EOFCommand() {
+  }
+
+  Future<List<int>> check(RegexVM vm, heti.TinyParser parser) async {
+    if(!parser.isEOF()) {
+      throw "";
+    }
+    RegexTask t = vm.getCurrentTask();
+    t._nextCommandLocation++;
+    return [];
+  }
+
+  String toString() {
+    return "<eof>";
+  }
+}

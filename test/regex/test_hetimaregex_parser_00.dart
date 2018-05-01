@@ -9,6 +9,7 @@ void main() => script00();
 
 void script00() {
   group('parser00', () {
+    /*
     test('char true a', () {
       regex.RegexParser parser = new regex.RegexParser();
       return parser.compile("aa").then((regex.RegexVM vm) {
@@ -130,6 +131,29 @@ void script00() {
       }).catchError((e) {
         expect(true, false);
       });
+    });
+*/
+    test('char true f', () async {
+      regex.RegexParser parser = new regex.RegexParser();
+      regex.RegexVM vm = await parser.compile("(xx)\$");
+      try {
+        List<List<int>> v = await  vm.lookingAt(conv.UTF8.encode("xx"));
+        expect(conv.UTF8.decode(v[0]),"xx");
+      } catch(e) {
+        expect(true, false);
+      }
+    });
+
+    test('char true g', () async {
+      regex.RegexParser parser = new regex.RegexParser();
+      regex.RegexVM vm = await parser.compile("xx(\n|\$)");
+      print(vm);
+      try {
+        List<List<int>> v = await vm.lookingAt(conv.UTF8.encode("xx"));
+        expect(conv.UTF8.decode(v[0]),"");
+      } catch(e) {
+        expect(true, false);
+      }
     });
   });
 }

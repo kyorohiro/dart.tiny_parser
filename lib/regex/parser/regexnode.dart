@@ -70,6 +70,14 @@ class StarPattern extends RegexNode {
   }
 }
 
+class EOFPattern extends RegexNode {
+  EOFPattern.fromBytes() {
+  }
+  List<RegexCommand> convertRegexCommands() {
+    return [new EOFCommand()];
+  }
+}
+
 class GroupPattern extends RegexNode {
   bool _isSaveInMemory = false;
 

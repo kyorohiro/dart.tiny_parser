@@ -10,6 +10,9 @@ class RegexLexer {
         try {
           int v = await parser.readByte();
           switch (v) {
+            case 0x24: // $
+              tokens.add(new RegexToken.fromChar(v, RegexToken.eof));
+              break;
             case 0x2a: // *
               tokens.add(new RegexToken.fromChar(v, RegexToken.star));
               break;

@@ -60,7 +60,7 @@ void main() {
 
     bool isOK1 = false;
     bool isOK2 = false;
-    builder.getBytes(5, 1).then((List<int > v) {
+    (builder.getBytes(5, 1) as Future<List<int>>).then((List<int > v) {
       unit.expect(builder.currentSize, 6);
       isOK1 = true;
     });
@@ -83,7 +83,7 @@ void main() {
       builder.addByte(6);
     });
 
-    builder.getBytes(8, 1).then((List<int > v) {
+    (builder.getBytes(8, 1) as Future<List<int>>).then((List<int > v) {
       unit.expect(v[0], 9);
       isOK2 = true;
     });
@@ -101,7 +101,7 @@ void main() {
 
   unit.test("ArrayBuilderBuffer: [2]", () async {
     hetima.ParserListBuffer builder = new hetima.ParserListBuffer();
-    builder.getBytes(2, 3).then((List<int > v) {
+    (builder.getBytes(2, 3) as Future<List<int>>).then((List<int > v) {
       unit.expect(v.length, 2);
       unit.expect(3, v[0]);
       unit.expect(4, v[1]);

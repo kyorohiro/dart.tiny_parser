@@ -1,4 +1,4 @@
-
+/*
 bool fsm(String target, int currentStatus, Map<Action, int> table, List<int> goal) {
   if (target.length == 0) {
     return goal.contains(currentStatus);
@@ -36,3 +36,4 @@ void main() {
   print(fsm("ad", 1, table, goal));
   print(fsm("e", 1, table, goal));
 }
+*/

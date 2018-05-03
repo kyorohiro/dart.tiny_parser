@@ -17,9 +17,9 @@ void script00() {
 
       return vm.lookingAt(conv.UTF8.encode("aa")).then((List<List<int>> v) {
         expect(true, true);
-      }).catchError((e) {
+      });/*.catchError((e) {
         expect(true, false);
-      });
+      });*/
     });
     test('char true2', () {
       regex.RegexVM vm = new regex.RegexVM.createFromCommand([

@@ -84,6 +84,7 @@ class RegexVM {
         _eraseCurrentTask();
       }
     } while(true);
+
   }
 
   Future<List<int>> unmatchingAtFromEasyParser(heti.TinyParser parser) async {

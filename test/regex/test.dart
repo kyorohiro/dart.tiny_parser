@@ -11,8 +11,17 @@ void main() => script00();
 void script00() {
   print("xx");
   group('parser00', () {
-    test('char true a', () {
-      regex.RegexVM italic1Reg = new regex.RegexVM.createFromPattern("\\*");
+    test('char true', () {
+      regex.RegexVM vm = new regex.RegexVM.createFromCommand([
+        new regex.CharCommand.createFromList(conv.UTF8.encode("aa")),
+        new regex.MatchCommand(),
+      ]);
+      print(vm);
+      return vm.lookingAt(conv.UTF8.encode("aa")).then((List<List<int>> v) {
+        expect(true, true);
+      });/*.catchError((e) {
+        expect(true, false);
+      });*/
     });
   });
 /*

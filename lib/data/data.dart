@@ -23,5 +23,5 @@ abstract class DataWriter {
 
 abstract class DataReader {
   Future<int> getLength();
-  Future<List<int>> getBytes(int offset, int length);
+  FutureOr<List<int>> getBytes(int offset, int length);
 }

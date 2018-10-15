@@ -2,7 +2,8 @@ name: tiny_parser
 version: 0.4.1
 description: p2p lib
 autohr: kyorohiro
-
+environment:
+  sdk: '>=2.0.0 <3.0.0'
 dev_dependencies:
   test: any
   args: any

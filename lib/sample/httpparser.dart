@@ -2,8 +2,8 @@ part of hetimacore;
 
 //rfc2616 rfc7230
 class HetiHttpResponse {
-  static List<int> PATH = convert.UTF8.encode(RfcTable.RFC3986_PCHAR_AS_STRING + "/");
-  static List<int> QUERY = convert.UTF8.encode(RfcTable.RFC3986_RESERVED_AS_STRING + RfcTable.RFC3986_UNRESERVED_AS_STRING);
+  static List<int> PATH = convert.utf8.encode(RfcTable.RFC3986_PCHAR_AS_STRING + "/");
+  static List<int> QUERY = convert.utf8.encode(RfcTable.RFC3986_RESERVED_AS_STRING + RfcTable.RFC3986_UNRESERVED_AS_STRING);
 
 
   //
@@ -49,7 +49,7 @@ class HetiHttpResponse {
 
   static Future<String> decodeFieldName(TinyParser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.TCHAR,expectedMatcherResult: true);
-    return convert.UTF8.decode(v);
+    return convert.utf8.decode(v);
   }
 
   static Future<String> decodeFieldValue(TinyParser parser) async {
@@ -60,7 +60,7 @@ class HetiHttpResponse {
         return true;
       }
     },expectedMatcherResult: true);
-    return convert.UTF8.decode(v);
+    return convert.utf8.decode(v);
   }
 
   //
@@ -105,7 +105,7 @@ class HetiHttpResponse {
       }
       return false;
     },expectedMatcherResult: true);
-    return convert.UTF8.decode(vv);
+    return convert.utf8.decode(vv);
   }
 
   //Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
@@ -156,7 +156,7 @@ class HetiHttpResponse {
     if (n.length == 0) {
       throw new EasyParseError();
     }
-    String nn = convert.UTF8.decode(n);
+    String nn = convert.utf8.decode(n);
     int v = int.parse(nn, radix: 16);
     await HetiHttpResponse.decodeChunkExtension(parser);
     await HetiHttpResponse.decodeCrlf(parser);
@@ -194,13 +194,13 @@ class HetiHttpResponse {
   // metod = token = 1*tchar
   static Future<String> decodeMethod(TinyParser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.TCHAR,expectedMatcherResult: true);
-    return convert.UTF8.decode(v);
+    return convert.utf8.decode(v);
   }
 
   // CHAR_STRING
   static Future<String> decodeRequestTarget(TinyParser parser) async {
     List<int> v = await parser.matchBytesFromBytes(RfcTable.VCHAR,expectedMatcherResult: true);
-    return convert.UTF8.decode(v);
+    return convert.utf8.decode(v);
   }
 
   // request-target = origin-form / absolute-form / authority-form / asterisk-form
@@ -346,18 +346,18 @@ class RfcTable {
   static String PCT_ENCODED_AS_STRING = "%"+HEXDIG_AS_STRING;
   static String RFC3986_SUB_DELIMS_AS_STRING = "!\$&'()*+,;=";
   static String RFC3986_PCHAR_AS_STRING = RFC3986_UNRESERVED_AS_STRING+":@"+RFC3986_SUB_DELIMS_AS_STRING+"%";
-  static List<int> ALPHA = convert.UTF8.encode(ALPHA_AS_STRING);
-  static List<int> DIGIT = convert.UTF8.encode(DIGIT_AS_STRING);
-  static List<int> RFC3986_UNRESERVED = convert.UTF8.encode(RFC3986_UNRESERVED_AS_STRING);
-  static List<int> RFC3986_RESERVED = convert.UTF8.encode(RFC3986_RESERVED_AS_STRING);
-  static List<int> GEM_DELIMS = convert.UTF8.encode(GEM_DELIMS_AS_STRING);
-  static List<int> SUB_DELIMS = convert.UTF8.encode(SUB_DELIMS_AS_STRING);
-  static List<int> HEXDIG = convert.UTF8.encode(HEXDIG_AS_STRING);
-  static List<int> PCT_ENCODED = convert.UTF8.encode(PCT_ENCODED_AS_STRING);
-  static List<int> VCHAR = convert.UTF8.encode(VCHAR_STRING);
-  static List<int> TCHAR = convert.UTF8.encode(TCHAR_STRING);
-  static List<int> OWS = convert.UTF8.encode(OWS_STRING);
-  static List<int> SP = convert.UTF8.encode(SP_STRING);
+  static List<int> ALPHA = convert.utf8.encode(ALPHA_AS_STRING);
+  static List<int> DIGIT = convert.utf8.encode(DIGIT_AS_STRING);
+  static List<int> RFC3986_UNRESERVED = convert.utf8.encode(RFC3986_UNRESERVED_AS_STRING);
+  static List<int> RFC3986_RESERVED = convert.utf8.encode(RFC3986_RESERVED_AS_STRING);
+  static List<int> GEM_DELIMS = convert.utf8.encode(GEM_DELIMS_AS_STRING);
+  static List<int> SUB_DELIMS = convert.utf8.encode(SUB_DELIMS_AS_STRING);
+  static List<int> HEXDIG = convert.utf8.encode(HEXDIG_AS_STRING);
+  static List<int> PCT_ENCODED = convert.utf8.encode(PCT_ENCODED_AS_STRING);
+  static List<int> VCHAR = convert.utf8.encode(VCHAR_STRING);
+  static List<int> TCHAR = convert.utf8.encode(TCHAR_STRING);
+  static List<int> OWS = convert.utf8.encode(OWS_STRING);
+  static List<int> SP = convert.utf8.encode(SP_STRING);
 
   //  obs-text = %x80-FF
   static List<int> OBS_TEXT = [

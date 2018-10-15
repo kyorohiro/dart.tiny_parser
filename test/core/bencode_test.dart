@@ -9,21 +9,21 @@ void main() {
   unit.group('A group of tests', () {
     unit.test("bencode: string", () {
     type.Uint8List out = Bencode.encode("test");
-    unit.expect("4:test", convert.UTF8.decode(out.toList()));
+    unit.expect("4:test", convert.utf8.decode(out.toList()));
     type.Uint8List text = Bencode.decode(out);
-    unit.expect("test", convert.UTF8.decode(text.toList()));
+    unit.expect("test", convert.utf8.decode(text.toList()));
  });
 
   unit.test("bencode: number", () {
     type.Uint8List out = Bencode.encode(1024);
-    unit.expect("i1024e", convert.UTF8.decode(out.toList()));
+    unit.expect("i1024e", convert.utf8.decode(out.toList()));
     num ret = Bencode.decode(out);
     unit.expect(1024, ret);
   });
 
 //  {
 //      type.Uint8List out = hetima.Bencode.encode(-10.24);
-//      unit.expect("i-10.24e", convert.UTF8.decode(out.toList()));
+//      unit.expect("i-10.24e", convert.utf8.decode(out.toList()));
 //      num ret = hetima.Bencode.decode(out);
 //      unit.expect(-10.24, ret);
 //  }
@@ -33,10 +33,10 @@ void main() {
     l.add("test");
     l.add(1024);
     type.Uint8List out = Bencode.encode(l);
-    unit.expect("l4:testi1024ee", convert.UTF8.decode(out.toList()));
+    unit.expect("l4:testi1024ee", convert.utf8.decode(out.toList()));
 
     List list = Bencode.decode(out);
-    unit.expect("test", convert.UTF8.decode(list[0].toList()));
+    unit.expect("test", convert.utf8.decode(list[0].toList()));
     unit.expect(1024, list[1]);
   });
 
@@ -47,11 +47,11 @@ void main() {
     pack["id"] = Uuid.createUUID();
     type.Uint8List out = Bencode.encode(pack);
 
-    unit.expect("d6:action4:join4:mode9:broadcast2:id36:" + pack["id"].toString() + "e", convert.UTF8.decode(out.toList()));
+    unit.expect("d6:action4:join4:mode9:broadcast2:id36:" + pack["id"].toString() + "e", convert.utf8.decode(out.toList()));
     Map m = Bencode.decode(out);
-    unit.expect(pack["action"].toString(), convert.UTF8.decode(m["action"]).toString());
-    unit.expect(pack["mode"].toString(), convert.UTF8.decode(m["mode"]).toString());
-    unit.expect(pack["id"].toString(), convert.UTF8.decode(m["id"]).toString());
+    unit.expect(pack["action"].toString(), convert.utf8.decode(m["action"]).toString());
+    unit.expect(pack["mode"].toString(), convert.utf8.decode(m["mode"]).toString());
+    unit.expect(pack["id"].toString(), convert.utf8.decode(m["id"]).toString());
   });
 
   unit.test("bencode: dictionary", () {
@@ -59,10 +59,10 @@ void main() {
     m["test"] = "test";
     m["value"] = 1024;
     type.Uint8List out = Bencode.encode(m);
-    unit.expect("d4:test4:test5:valuei1024ee", convert.UTF8.decode(out.toList()));
+    unit.expect("d4:test4:test5:valuei1024ee", convert.utf8.decode(out.toList()));
 
     Map me = Bencode.decode(out);
-    unit.expect("test", convert.UTF8.decode(me["test"].toList()));
+    unit.expect("test", convert.utf8.decode(me["test"].toList()));
     unit.expect(1024, me["value"]);
   });
  });

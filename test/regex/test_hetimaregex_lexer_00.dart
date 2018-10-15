@@ -12,7 +12,7 @@ void script00() {
     test('char true', () {
       regex.RegexLexer lexer = new regex.RegexLexer();
 
-      return lexer.scan(conv.UTF8.encode("aa|v\\n(a*)")).then((List<regex.RegexToken> v) {
+      return lexer.scan(conv.utf8.encode("aa|v\\n(a*)")).then((List<regex.RegexToken> v) {
         expect(true, true);
         expect(v[0].kind, regex.RegexToken.character);
         expect(v[1].kind, regex.RegexToken.character);

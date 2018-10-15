@@ -28,7 +28,7 @@ class PercentEncode
 
   List<int> decodeWork(String message) {
     builder.clear();
-    List<int> target = convert.UTF8.encode(message);
+    List<int> target = convert.utf8.encode(message);
     int count = target.length;
     for(int i=0;i<count;i++) {
       if(message[i] == '%') {

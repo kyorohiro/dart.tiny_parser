@@ -11,7 +11,7 @@ void main() {
   unit.group("hetimabencode", (){
     unit.test("number", (){
       type.Uint8List out = hetima.Bencode.encode(1024);
-      unit.expect("i1024e", convert.UTF8.decode(out.toList()));
+      unit.expect("i1024e", convert.utf8.decode(out.toList()));
       hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
       hetima.TinyParser parser = new hetima.TinyParser(builder);
       Future e = hetima.BencodeAsync.decode(parser).then((Object o) {
@@ -130,13 +130,13 @@ void main() {
     l.add("test");
     l.add(1024);
     type.Uint8List out = hetima.Bencode.encode(l);
-    unit.expect("l4:testi1024ee", convert.UTF8.decode(out.toList()));
+    unit.expect("l4:testi1024ee", convert.utf8.decode(out.toList()));
 
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
     hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeList(parser).then((List<Object> o) {
-      unit.expect(convert.UTF8.decode(o[0]), "test");
+      unit.expect(convert.utf8.decode(o[0]), "test");
       unit.expect(o[1],  1024);
     }).catchError((e) {
 
@@ -192,13 +192,13 @@ void main() {
     m["test"] = "test";
     m["value"] = 1024;
     type.Uint8List out = hetima.Bencode.encode(m);
-    unit.expect("d4:test4:test5:valuei1024ee", convert.UTF8.decode(out.toList()));
+    unit.expect("d4:test4:test5:valuei1024ee", convert.utf8.decode(out.toList()));
 
     hetima.ParserByteBuffer builder = new hetima.ParserByteBuffer();
     hetima.TinyParser parser = new hetima.TinyParser(builder);
     hetima.BdecoderAsync decoder = new hetima.BdecoderAsync();
     Future e = decoder.decodeDiction(parser).then((Map dict) {
-      unit.expect(convert.UTF8.decode(dict["test"]),"test");
+      unit.expect(convert.utf8.decode(dict["test"]),"test");
       unit.expect(dict["value"],1024);
     });
     builder.addBytes(out, index:0, length:out.length);

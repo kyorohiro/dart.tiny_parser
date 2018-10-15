@@ -25,7 +25,7 @@ class Bencode {
       if (!(p[key] is data.Uint8List)) {
         return def;
       }
-      return convert.UTF8.decode((p[key] as data.Uint8List).toList());
+      return convert.utf8.decode((p[key] as data.Uint8List).toList());
     } catch (e) {
       return def;
     }
@@ -130,7 +130,7 @@ class Bdecoder {
     Map ret = new Map();
     while (index < buffer.length && buffer[index] != 0x65) {
       data.Uint8List keyAsList = decodeBenObject(buffer);
-      String key = convert.UTF8.decode(keyAsList.toList());
+      String key = convert.utf8.decode(keyAsList.toList());
       ret[key] = decodeBenObject(buffer);
     }
     return ret;
@@ -200,7 +200,7 @@ class Bencoder {
   }
 
   void encodeString(String obj) {
-    List<int> buffer = convert.UTF8.encode(obj);
+    List<int> buffer = convert.utf8.encode(obj);
     builder.appendString("" + buffer.length.toString() + ":" + obj);
   }
 
@@ -214,7 +214,7 @@ class Bencoder {
   }
 
   void encodeDictionary(Map obj) {
-    Iterable<String> keys = obj.keys;
+    Iterable<dynamic> keys = obj.keys;
     builder.appendString("d");
     for (var key in keys) {
       encodeString(key);

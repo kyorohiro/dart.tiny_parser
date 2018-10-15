@@ -13,11 +13,11 @@ void script00() {
   group('parser00', () {
     test('char true', () {
       regex.RegexVM vm = new regex.RegexVM.createFromCommand([
-        new regex.CharCommand.createFromList(conv.UTF8.encode("aa")),
+        new regex.CharCommand.createFromList(conv.utf8.encode("aa")),
         new regex.MatchCommand(),
       ]);
       print(vm);
-      return vm.lookingAt(conv.UTF8.encode("aa")).then((List<List<int>> v) {
+      return vm.lookingAt(conv.utf8.encode("aa")).then((List<List<int>> v) {
         expect(true, true);
       });/*.catchError((e) {
         expect(true, false);
@@ -30,12 +30,12 @@ void script00() {
       regex.RegexParser parser = new regex.RegexParser();
       return parser.compile("\n|\r\n").then((regex.RegexVM vm) {
         pars.TinyParser p =
-        new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.UTF8.encode("ababc"), true));
+        new pars.TinyParser(new pars.ParserByteBuffer.fromList(conv.utf8.encode("ababc"), true));
 
         print(vm.toString());
 
         return vm.unmatchingAtFromEasyParser(p).then((List<int> v){
-          print("xx = "+ conv.UTF8.decode(v));
+          print("xx = "+ conv.utf8.decode(v));
           print("xx = "+ p.index.toString());
         });
       }).catchError((e) {

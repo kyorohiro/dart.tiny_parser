@@ -40,7 +40,7 @@ class Metadata {
     content = source;
     reader = new pars.ParserByteBuffer();
     parser = new pars.TinyParser(reader);
-    reader.addBytes(conv.UTF8.encode(source));
+    reader.addBytes(conv.utf8.encode(source));
     reader.loadCompleted = true;
     int ret = await eMetadata(parser);
     content = source.substring(ret);
@@ -57,7 +57,7 @@ class Metadata {
       //
       // <xxx> : <yyy> crlf
       do{
-        if(0 != await parser.checkBytesFromMatchBytes(conv.UTF8.encode(" \t")));
+        if(0 != await parser.checkBytesFromMatchBytes(conv.utf8.encode(" \t")));
         await eKeyValue(parser);
       } while(0 == await parser.checkString("---"));
 
@@ -89,13 +89,13 @@ class Metadata {
     if(0!=await parser.checkString(" ")) {
       throw "";
     }
-    List<int> v = await parser.matchBytesFromBytes(conv.UTF8.encode(":\n"), expectedMatcherResult: false);
-    return conv.UTF8.decode(v, allowMalformed: true);
+    List<int> v = await parser.matchBytesFromBytes(conv.utf8.encode(":\n"), expectedMatcherResult: false);
+    return conv.utf8.decode(v, allowMalformed: true);
   }
 
   Future<String> eValue(pars.TinyParser parser) async {
-    List<int> v = await parser.matchBytesFromBytes(conv.UTF8.encode("\r\n"), expectedMatcherResult: false);
-    String ret = conv.UTF8.decode(v);
+    List<int> v = await parser.matchBytesFromBytes(conv.utf8.encode("\r\n"), expectedMatcherResult: false);
+    String ret = conv.utf8.decode(v);
 
     if((0 != await parser.checkString("\r\n ") || 0 != await parser.checkString("\r\n\t"))) {
       return ret + await eCrlf(parser) + (await eSpace(parser)?"":"") + await eValue(parser);

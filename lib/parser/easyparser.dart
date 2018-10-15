@@ -107,7 +107,7 @@ class TinyParser {
   }
 
   FutureOr<String> nextString(String value) {
-    FutureOr<List<int>> retFOr = nextBytes(convert.UTF8.encode(value));
+    FutureOr<List<int>> retFOr = nextBytes(convert.utf8.encode(value));
     if(retFOr is Future<List<int>>) {
       return (retFOr as Future<List<int>>).then((List<int> v) {return value;});
     } else {
@@ -269,7 +269,7 @@ class TinyParser {
     return length;
   }
 
-  FutureOr<int> checkString(String value) => checkBytes(convert.UTF8.encode(value));
+  FutureOr<int> checkString(String value) => checkBytes(convert.utf8.encode(value));
 
   FutureOr<int> checkBytesFromMatchBytes(List<int> encoded) => checkBytesFromBytes(encoded, expectedMatcherResult:true);
 

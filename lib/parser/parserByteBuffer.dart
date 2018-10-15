@@ -97,11 +97,11 @@ class ParserByteBuffer extends ParserReaderBaseBase implements ParserAppender, P
     }
   }
 
-  void appendString(String text) => addBytes(convert.UTF8.encode(text));
+  void appendString(String text) => addBytes(convert.utf8.encode(text));
 
   List toList() => _buffer8.sublist(0, _length);
 
   data.Uint8List toUint8List() => new data.Uint8List.fromList(toList());
 
-  String toText() => convert.UTF8.decode(toList());
+  String toText() => convert.utf8.decode(toList());
 }

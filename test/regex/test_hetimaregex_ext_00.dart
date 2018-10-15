@@ -13,17 +13,17 @@ void script00() {
     test('char true a', () {
       regex.RegexBuilder builder = new regex.RegexBuilder();
       builder
-      .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("[[")))
+      .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("[[")))
       .push(true)
       .addRegexLeaf(new regex.StarPattern.fromCommand(new regex.AllCharCommand()))
       .pop()
-      .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("]]")));
+      .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("]]")));
       regex.RegexVM vm = new regex.RegexVM.createFromCommand(builder.done());
 
       print(vm.toString());
 
-      return vm.lookingAt(conv.UTF8.encode("[[aabb]]")).then((List<List<int>> v) {
-        expect(conv.UTF8.decode(v[0]),"aabb");
+      return vm.lookingAt(conv.utf8.encode("[[aabb]]")).then((List<List<int>> v) {
+        expect(conv.utf8.decode(v[0]),"aabb");
       }).catchError((e) {
         expect(true, false);
       });
@@ -32,16 +32,16 @@ void script00() {
     test('char true a', () {
       regex.RegexBuilder builder = new regex.RegexBuilder();
       builder
-      .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("[[")))
+      .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("[[")))
       .push(true)
-      .addRegexLeaf(new regex.StarPattern.fromCommand(new regex.UncharacterCommand(conv.UTF8.encode("]]"))))
+      .addRegexLeaf(new regex.StarPattern.fromCommand(new regex.UncharacterCommand(conv.utf8.encode("]]"))))
       .pop()
-      .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("]]")));
+      .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("]]")));
       regex.RegexVM vm = new regex.RegexVM.createFromCommand(builder.done());
 
       print(vm.toString());
-      return vm.lookingAt(conv.UTF8.encode("[[aabb]]")).then((List<List<int>> v) {
-        expect(conv.UTF8.decode(v[0]),"aabb");
+      return vm.lookingAt(conv.utf8.encode("[[aabb]]")).then((List<List<int>> v) {
+        expect(conv.utf8.decode(v[0]),"aabb");
       }).catchError((e) {
         expect(true, false);
       });
@@ -50,9 +50,9 @@ void script00() {
     regex.RegexBuilder number = new regex.RegexBuilder();
     number
     .push(true)
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("+")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("+")))
     .or()
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("-")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("-")))
     .or()
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
@@ -62,7 +62,7 @@ void script00() {
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
     .push(true)
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode(".")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode(".")))
     .or()
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
@@ -75,11 +75,11 @@ void script00() {
       regex.RegexVM vm = new regex.RegexVM.createFromCommand(number.done());
 
       print(vm.toString());
-      return vm.lookingAt(conv.UTF8.encode("+1000.11")).then((List<List<int>> v) {
-        expect(conv.UTF8.decode(v[0]),"+");
-        expect(conv.UTF8.decode(v[1]),"1000");
-        expect(conv.UTF8.decode(v[2]),".");
-        expect(conv.UTF8.decode(v[3]),"11");
+      return vm.lookingAt(conv.utf8.encode("+1000.11")).then((List<List<int>> v) {
+        expect(conv.utf8.decode(v[0]),"+");
+        expect(conv.utf8.decode(v[1]),"1000");
+        expect(conv.utf8.decode(v[2]),".");
+        expect(conv.utf8.decode(v[3]),"11");
       }).catchError((e) {
         expect(true, false);
       });
@@ -88,11 +88,11 @@ void script00() {
     test('.11', () {
       regex.RegexVM vm = new regex.RegexVM.createFromCommand(number.done());
       print(vm.toString());
-      return vm.lookingAt(conv.UTF8.encode(".11")).then((List<List<int>> v) {
-        expect(conv.UTF8.decode(v[0]),"");
-        expect(conv.UTF8.decode(v[1]),"");
-        expect(conv.UTF8.decode(v[2]),".");
-        expect(conv.UTF8.decode(v[3]),"11");
+      return vm.lookingAt(conv.utf8.encode(".11")).then((List<List<int>> v) {
+        expect(conv.utf8.decode(v[0]),"");
+        expect(conv.utf8.decode(v[1]),"");
+        expect(conv.utf8.decode(v[2]),".");
+        expect(conv.utf8.decode(v[3]),"11");
       }).catchError((e) {
         expect(true, false);
       });
@@ -101,13 +101,13 @@ void script00() {
     regex.RegexBuilder hexNumber = new regex.RegexBuilder();
     hexNumber
     .push(true)
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("+")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("+")))
     .or()
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("-")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("-")))
     .or()
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode("0x")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode("0x")))
     .push(true)
     .addRegexLeaf(new regex.StarPattern.fromCommand(
         new regex.MatchByteCommand([
@@ -119,7 +119,7 @@ void script00() {
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
     .push(true)
-    .addRegexCommand(new regex.CharCommand.createFromList(conv.UTF8.encode(".")))
+    .addRegexCommand(new regex.CharCommand.createFromList(conv.utf8.encode(".")))
     .or()
     .addRegexCommand(new regex.EmptyCommand())
     .pop()
@@ -137,11 +137,11 @@ void script00() {
       regex.RegexVM vm = new regex.RegexVM.createFromCommand(number.done());
 
       print(vm.toString());
-      return vm.lookingAt(conv.UTF8.encode("+1000.11")).then((List<List<int>> v) {
-        expect(conv.UTF8.decode(v[0]),"+");
-        expect(conv.UTF8.decode(v[1]),"1000");
-        expect(conv.UTF8.decode(v[2]),".");
-        expect(conv.UTF8.decode(v[3]),"11");
+      return vm.lookingAt(conv.utf8.encode("+1000.11")).then((List<List<int>> v) {
+        expect(conv.utf8.decode(v[0]),"+");
+        expect(conv.utf8.decode(v[1]),"1000");
+        expect(conv.utf8.decode(v[2]),".");
+        expect(conv.utf8.decode(v[3]),"11");
       }).catchError((e) {
         expect(true, false);
       });

@@ -12,7 +12,7 @@ class BencodeAsync {
 class BdecoderAsync {
   BencodeAsyncError tmpError = new BencodeAsyncError.empty();
   static String DIGIT_AS_STRING = "0123456789";
-  static List<int> DIGIT = convert.UTF8.encode(DIGIT_AS_STRING);
+  static List<int> DIGIT = convert.utf8.encode(DIGIT_AS_STRING);
 
   Future<Object> decode(TinyParser parser) {
     return decodeBenObject(parser);
@@ -90,7 +90,7 @@ class BdecoderAsync {
 
   Future<String> decodeString(TinyParser parser) async {
     List<int> v = await decodeBytes(parser);
-    return convert.UTF8.decode(v, allowMalformed: true);
+    return convert.utf8.decode(v, allowMalformed: true);
   }
 
   Future<List<int>> decodeBytes(TinyParser parser) async {

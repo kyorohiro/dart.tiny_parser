@@ -75,7 +75,7 @@ abstract class ParserReaderBase extends ParserReader {
   }
 
   Future<String> getAllString({bool allowMalformed: true}) async {
-    return convert.UTF8
+    return convert.utf8
         .decode(await getAllBytes(), allowMalformed: allowMalformed);
   }
 

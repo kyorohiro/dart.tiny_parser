@@ -83,7 +83,7 @@ class ParserListBuffer extends ParserReaderBaseBase implements ParserAppender, P
     }
   }
 
-  void appendString(String text) => addBytes(convert.UTF8.encode(text));
+  void appendString(String text) => addBytes(convert.utf8.encode(text));
 
   List toList() => toUint8List();
 
@@ -95,6 +95,6 @@ class ParserListBuffer extends ParserReaderBaseBase implements ParserAppender, P
     return ret;
   }
 
-  String toText() => convert.UTF8.decode(toList());
+  String toText() => convert.utf8.decode(toList());
 }
 

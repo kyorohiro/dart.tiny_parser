@@ -27,12 +27,12 @@ class HttpUrlDecoder {
   static final String SUB_DELIMS_AS_STRING = """!\$&'()*+,;=""";
   static final String RFC3986_RESERVED_AS_STRING = GEM_DELIMS_AS_STRING+SUB_DELIMS_AS_STRING+"%";
 
-  static final List<int> RFC3986_UNRESERVED = convert.UTF8.encode(RFC3986_UNRESERVED_AS_STRING);
-  static final List<int> DIGIT = convert.UTF8.encode(DIGIT_AS_STRING);
-  static final List<int> SCHEME_HTTP = convert.UTF8.encode("http://");
-  static final List<int> SCHEME_HTTPS = convert.UTF8.encode("https://");
-  static final List<int> PATH = convert.UTF8.encode(RFC3986_PCHAR_AS_STRING + "/");
-  static final List<int> QUERY = convert.UTF8.encode(RFC3986_RESERVED_AS_STRING + RFC3986_UNRESERVED_AS_STRING);
+  static final List<int> RFC3986_UNRESERVED = convert.utf8.encode(RFC3986_UNRESERVED_AS_STRING);
+  static final List<int> DIGIT = convert.utf8.encode(DIGIT_AS_STRING);
+  static final List<int> SCHEME_HTTP = convert.utf8.encode("http://");
+  static final List<int> SCHEME_HTTPS = convert.utf8.encode("https://");
+  static final List<int> PATH = convert.utf8.encode(RFC3986_PCHAR_AS_STRING + "/");
+  static final List<int> QUERY = convert.utf8.encode(RFC3986_RESERVED_AS_STRING + RFC3986_UNRESERVED_AS_STRING);
 
   static HttpUrlDecoder _sDecoder = new HttpUrlDecoder();
 
@@ -63,7 +63,7 @@ class HttpUrlDecoder {
   }
 
   HttpUrl innerDecodeUrl(String _url, [String baseAddr = null]) {
-    url = convert.UTF8.encode(_url);
+    url = convert.utf8.encode(_url);
     index = 0;
     HttpUrl ret = new HttpUrl();
     try {
@@ -113,7 +113,7 @@ class HttpUrlDecoder {
       while (matchChar(RFC3986_UNRESERVED)) {
         ;
       }
-      return convert.UTF8.decode(last());
+      return convert.utf8.decode(last());
     } finally {
       pop();
     }
@@ -134,7 +134,7 @@ class HttpUrlDecoder {
         ;
       }
       List<int> pathAsList = last();
-      String pathAsString = convert.UTF8.decode(pathAsList);
+      String pathAsString = convert.utf8.decode(pathAsList);
       return pathAsString;
     } finally {
       pop();
@@ -155,7 +155,7 @@ class HttpUrlDecoder {
         ;
       }
       List<int> pathAsList = last();
-      String pathAsString = convert.UTF8.decode(pathAsList);
+      String pathAsString = convert.utf8.decode(pathAsList);
       return pathAsString;
     } finally {
       pop();
@@ -180,7 +180,7 @@ class HttpUrlDecoder {
       if (portAsList.length <= 1) {
         return (scheme=="http"?80:443);
       }
-      String portAsString = convert.UTF8.decode(portAsList);
+      String portAsString = convert.utf8.decode(portAsList);
       return int.parse(portAsString.substring(1));
     } finally {
       pop();

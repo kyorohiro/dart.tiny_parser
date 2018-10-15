@@ -7,7 +7,7 @@ class RegexParser {
     Completer<RegexVM> completer = new Completer();
     RegexLexer lexer = new RegexLexer();
 
-    List<RegexToken> tokens = await lexer.scan(conv.UTF8.encode(source));
+    List<RegexToken> tokens = await lexer.scan(conv.utf8.encode(source));
 
     GroupPattern root = new GroupPattern(isSaveInMemory:false);
     List<GroupPattern> stack = [root];
@@ -46,7 +46,7 @@ class RegexParser {
 
   RegexVM compileSync(String source) {
     RegexLexer lexer = new RegexLexer();
-    List<RegexToken> tokens = lexer.scanSync(conv.UTF8.encode(source));
+    List<RegexToken> tokens = lexer.scanSync(conv.utf8.encode(source));
     GroupPattern root = new GroupPattern(isSaveInMemory:false);
     List<GroupPattern> stack = [root];
 

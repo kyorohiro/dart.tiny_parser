@@ -1,5 +1,5 @@
 import 'package:test/test.dart' as unit;
-import 'package:tiny_parser/markdown.dart' as markd;
+import 'package:tiny_parser/sample/markdown.dart' as markd;
 import 'dart:convert' as convert;
 
 import 'dart:async';
@@ -12,7 +12,7 @@ void main() {
 
   unit.test("main", () async {
     core.ParserByteBuffer buffer =
-      new core.ParserByteBuffer.fromList(conv.UTF8.encode(
+      new core.ParserByteBuffer.fromList(conv.utf8.encode(
           "# sdf\r\n\r\n asdfasdf\r\n\r\n"));
     buffer.loadCompleted = true;
     core.TinyParser parser = new core.TinyParser(buffer);
@@ -25,7 +25,7 @@ void main() {
   });
 /*
   unit.test("heading1", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("# sdf\r\n"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("# sdf\r\n"));
     core.TinyParser parser = new core.TinyParser(buffer);
     markd.Heading heading = new markd.Heading();
     markd.HeadingObject object = await heading.parse(parser);
@@ -34,7 +34,7 @@ void main() {
   });
 
   unit.test("heading2", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("sdf\r\n----\r\n"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("sdf\r\n----\r\n"));
     core.TinyParser parser = new core.TinyParser(buffer);
     markd.Heading2 heading = new markd.Heading2();
     markd.HeadingObject object = await heading.parse(parser);
@@ -43,7 +43,7 @@ void main() {
   });
 
   unit.test("heading2", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("sdf\r\n===\r\n"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("sdf\r\n===\r\n"));
     core.TinyParser parser = new core.TinyParser(buffer);
     markd.Heading3 heading = new markd.Heading3();
     markd.HeadingObject object = await heading.parse(parser);
@@ -52,7 +52,7 @@ void main() {
   });
 
   unit.test("italic", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("*===*"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("*===*"));
     core.TinyParser parser = new core.TinyParser(buffer);
     markd.Italic bold = new markd.Italic();
     markd.ItalicObject object = await bold.parse(parser);
@@ -60,7 +60,7 @@ void main() {
   });
 
   unit.test("bold", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("**===**"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("**===**"));
     core.TinyParser parser = new core.TinyParser(buffer);
     markd.Bold bold = new markd.Bold();
     markd.BoldObject object = await bold.parse(parser);
@@ -68,7 +68,7 @@ void main() {
   });
 
   unit.test("block", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode("===\0"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode("===\0"));
     core.TinyParser parser = new core.TinyParser(buffer);
     parser.buffer.loadCompleted = true;
     markd.Paragraph paragraph = new markd.Paragraph();
@@ -77,7 +77,7 @@ void main() {
   });
 
   unit.test("lists", () async {
-    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.UTF8.encode(" * xxx\r\nasdf\0"));
+    core.ParserByteBuffer buffer = new core.ParserByteBuffer.fromList(conv.utf8.encode(" * xxx\r\nasdf\0"));
     core.TinyParser parser = new core.TinyParser(buffer);
     parser.buffer.loadCompleted = true;
     markd.Lists lists = new markd.Lists();

@@ -122,7 +122,7 @@ class UncharacterCommand extends RegexCommand {
     return c.future;
   }
   String toString() {
-    return "<not char> ${conv.UTF8.decode(without)}";
+    return "<not char> ${conv.utf8.decode(without)}";
   }
 }
 

@@ -79,11 +79,11 @@ class IPConv {
     if (e > 0) {
       ip = ip.substring(0, e);
     }
-    List rawIP = null;
+    List<int> rawIP = null;
     if (ip.contains(".")) {
       // ip v4
       if (output == null || output.length >= 4) {
-        rawIP = new List(4);
+        rawIP = new List<int>(4);
       } else {
         rawIP = output;
       }

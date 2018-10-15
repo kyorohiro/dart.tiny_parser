@@ -4,7 +4,7 @@
 
 # license
 
-CC0
+Apache-2.0
 
-https://creativecommons.org/share-your-work/public-domain/cc0/
+https://opensource.org/licenses/Apache-2.0
 

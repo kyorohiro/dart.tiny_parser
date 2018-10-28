@@ -16,6 +16,8 @@ class TinyParser {
   MemoryBuffer _cache;
   convert.Utf8Decoder _utfDecoder = new convert.Utf8Decoder(allowMalformed: true);
 
+  bool hasBuffer(int length){return _buffer.currentSize >= index+length;}
+
   TinyParser(ParserReader builder, {this.logon: false, int cacheSize: 256}) {
     _buffer = builder;
     if(cacheSize < 256) {
@@ -56,7 +58,7 @@ class TinyParser {
   }
 
   Future<int> moveOffsetAsync(int moveBytes) async {
-    await waitByBuffered(index, moveBytes,checkLength: true);
+    await waitByBuffered(moveBytes,checkLength: true);
     _index += moveBytes;
     return index;
   }
@@ -69,7 +71,7 @@ class TinyParser {
 
   //
   //
-  Future<int> waitByBuffered(int index, int length, {bool checkLength:false}) async {
+  Future<int> waitByBuffered(int length, {bool checkLength:false}) async {
     int ret = await _buffer.waitByBuffered(index, length);
     if(checkLength) {
       if (index + length > _buffer.currentSize) {
@@ -106,12 +108,21 @@ class TinyParser {
     return encoded;
   }
 
-  FutureOr<String> nextString(String value) {
-    FutureOr<List<int>> retFOr = nextBytes(convert.utf8.encode(value));
-    if(retFOr is Future<List<int>>) {
-      return (retFOr as Future<List<int>>).then((List<int> v) {return value;});
+  FutureOr<String> nextString(String value,{bool checkUpperLowerCase:false}) {
+    if(checkUpperLowerCase) {
+      FutureOr<List<int>> retFOr = nextStringWithUpperLowerCase(convert.utf8.encode(value));
+      if(retFOr is Future<List<int>>) {
+        return retFOr.then((List<int> v) {return value;});
+      } else {
+        return value;
+      }
     } else {
-      return value;
+      FutureOr<List<int>> retFOr = nextBytes(convert.utf8.encode(value));
+      if(retFOr is Future<List<int>>) {
+        return retFOr.then((List<int> v) {return value;});
+      } else {
+        return value;
+      }
     }
   }
 
@@ -126,7 +137,7 @@ class TinyParser {
   }
 
   FutureOr<List<int>> nextStringWithUpperLowerCaseAsync(List<int> encoded ) async {
-    await waitByBuffered(index, encoded.length, checkLength: true);
+    await waitByBuffered(encoded.length, checkLength: true);
     return nextStringWithUpperLowerCaseSync(encoded);
   }
 
@@ -200,7 +211,7 @@ class TinyParser {
   }
 
   Future<int> checkBytesAsync(List<int> encoded) async {
-    await waitByBuffered(index, encoded.length);
+    await waitByBuffered(encoded.length);
     return checkBytesSync(encoded);
   }
 
@@ -333,6 +344,7 @@ class TinyParser {
     }
   }
 
+  
   //
   // GET
   //
@@ -357,7 +369,7 @@ class TinyParser {
   }
 
   Future<List<int>> getBytesAsync(int length, {bool checkLength:false, moveOffset:true}) async {
-    int newLength = await waitByBuffered(index, length, checkLength:checkLength);
+    int newLength = await waitByBuffered(length, checkLength:checkLength);
     return getBytesSync(newLength, moveOffset:moveOffset);
   }
 
@@ -383,7 +395,7 @@ class TinyParser {
   }
 
   Future<int> readBytesAsync(int length, List<int> out,{int offset:0, bool checkLength:false, moveOffset:true}) async {
-    int newLength = await waitByBuffered(index, length, checkLength:checkLength);
+    int newLength = await waitByBuffered(length, checkLength:checkLength);
     return readBytesSync(newLength, out, offset: offset, moveOffset: moveOffset);
   }
 
@@ -398,7 +410,7 @@ class TinyParser {
   }
 
   Future<String> readStringAsync(int byteLength, {moveOffset:true}) async {
-    await waitByBuffered(index, byteLength, checkLength: true);
+    await waitByBuffered(byteLength, checkLength: true);
     return readStringSync(byteLength, moveOffset: moveOffset);
   }
 
@@ -426,7 +438,7 @@ class TinyParser {
   }
 
   Future<int> readLongAsync(ByteOrderType byteorder, {moveOffset:true}) async {
-    await waitByBuffered(index, 8, checkLength: true);
+    await waitByBuffered(8, checkLength: true);
     return readLongSync(byteorder, moveOffset: moveOffset);
   }
 
@@ -449,7 +461,7 @@ class TinyParser {
   }
 
   Future<int> readIntAsync(ByteOrderType byteorder, {moveOffset:true}) async {
-    await waitByBuffered(index, 4, checkLength: true);
+    await waitByBuffered(4, checkLength: true);
     return readIntSync(byteorder, moveOffset: moveOffset);
   }
 
@@ -472,7 +484,7 @@ class TinyParser {
   }
 
   Future<int> readShortAsync(ByteOrderType byteorder, {moveOffset:true}) async {
-    await waitByBuffered(index, 2, checkLength: true);
+    await waitByBuffered(2, checkLength: true);
     return readShortSync(byteorder, moveOffset: moveOffset);
   }
 
@@ -495,7 +507,7 @@ class TinyParser {
   }
 
   Future<int> readByteAsync({moveOffset:true}) async {
-    await waitByBuffered(index, 1,checkLength: true);
+    await waitByBuffered(1, checkLength: true);
     return  readByteSync(moveOffset: moveOffset);
   }
 }
